@@ -30,26 +30,36 @@ export default function HomePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [videoDone, setVideoDone] = useState(false);
   // Browsers (Chrome/Safari) reject autoplay with audio unless it follows a
-  // user gesture, so we start muted and unmute on first interaction.
-  const [audioUnlocked, setAudioUnlocked] = useState(false);
-  const [showSoundHint, setShowSoundHint] = useState(true);
+  // user gesture. We keep the video file muted and drive sound via a
+  // separate <audio> element whose playback is gated by `audioStarted`.
+  const [audioStarted, setAudioStarted] = useState(false);
+  const [showBeginCta, setShowBeginCta] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const handleVideoEnd = useCallback(() => setVideoDone(true), []);
 
-  const handleSkipVideo = useCallback(() => setVideoDone(true), []);
+  const handleSkipVideo = useCallback(() => {
+    if (audioRef.current) audioRef.current.pause();
+    setVideoDone(true);
+  }, []);
 
-  const unlockAudio = useCallback(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.muted = false;
-    v.volume = 0.85;
-    // If the video already played muted through, restart so the audio
-    // comes in from the beginning (matches the visual now playing).
-    v.currentTime = 0;
-    v.play().catch(() => {});
-    setAudioUnlocked(true);
-    setShowSoundHint(false);
+  const beginExperience = useCallback(() => {
+    // Hard rewind the muted video so the audio + visual stay perfectly in
+    // sync from this point onwards. The audio element is independent and
+    // gets its own play() call inside the user-gesture handler.
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {});
+    }
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.volume = 0.85;
+      audioRef.current.play().catch(() => {});
+    }
+    setAudioStarted(true);
+    setShowBeginCta(false);
   }, []);
 
   useEffect(() => {
@@ -92,57 +102,82 @@ export default function HomePage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
             className="fixed inset-0 z-40"
-            onClick={!audioUnlocked ? unlockAudio : undefined}
           >
-            {/* Video — full brightness, plays muted by default so the browser
-                allows autoplay; unmute happens on the first user click via
-                unlockAudio (which is wired to the entire intro surface below). */}
+            {/* Video — file has no audio track; runs muted so autoplay
+                is honoured on all browsers. The Jimeng soundtrack is
+                served as a separate audio element below (gated by
+                user gesture via the Begin CTA). */}
             <video
               ref={videoRef}
-              className="absolute inset-0 w-full h-full object-cover cursor-pointer"
+              className="absolute inset-0 w-full h-full object-cover"
               src="/landing-hero.mp4"
               autoPlay
-              muted={!audioUnlocked}
+              muted
               playsInline
               onEnded={handleVideoEnd}
+            />
+
+            {/* Dedicated audio element — only plays after the user has
+                tapped the Begin CTA (which counts as the user gesture
+                Chromium/Safari require before any audible playback). */}
+            <audio
+              ref={audioRef}
+              src="/landing-hero-audio.m4a"
+              preload="auto"
             />
 
             {/* Light overlay so text overlay is readable */}
             <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-[#000d1a]/20 to-black/30 pointer-events-none" />
 
-            {/* Sound-on hint — visible until the user clicks anywhere.
-                The whole intro stage already has an onClick handler, so this
-                is purely a visual nudge (no extra listener). */}
+            {/* Begin CTA — required user gesture that starts the audio.
+                Stays visible until the user taps it. After it dismisses
+                the experience plays through to the end. */}
             <AnimatePresence>
-              {showSoundHint && (
+              {showBeginCta && !videoDone && (
                 <motion.div
-                  key="sound-hint"
-                  initial={{ opacity: 0, y: 12 }}
+                  key="begin-cta"
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 12 }}
-                  transition={{ duration: 0.4 }}
-                  className="absolute top-8 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+                  exit={{ opacity: 0, y: -10, scale: 0.96 }}
+                  transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                  className="absolute inset-0 z-[60] flex flex-col items-center justify-center px-6"
                 >
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/45 backdrop-blur-md border border-white/15 text-white/85 text-xs">
-                    <Volume2 className="w-3.5 h-3.5 text-[#d4a84b]" />
-                    <span>Click anywhere to enable sound · 点击任意位置开启声音</span>
+                  <div className="text-center space-y-6 max-w-md">
+                    <div className="flex items-center justify-center gap-2 text-[#d4a84b] text-xs uppercase tracking-[0.3em]">
+                      <span className="w-10 h-px bg-[#d4a84b]/60" />
+                      HKUST · Class of {ADMISSION_YEAR}
+                      <span className="w-10 h-px bg-[#d4a84b]/60" />
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                      Your story begins <span className="text-[#d4a84b]">today</span>.
+                    </h1>
+                    <p className="text-white/70 text-sm md:text-base">
+                      Tap below to start the cinematic intro with sound.
+                      <br />
+                      <span className="text-white/45 text-xs">点击下方按钮开启沉浸式体验(含声音)</span>
+                    </p>
+                    <motion.button
+                      onClick={beginExperience}
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.97 }}
+                      className="inline-flex items-center gap-3 px-9 py-4 rounded-full bg-gradient-to-r from-[#996600] to-[#d4a84b] text-white font-semibold text-base md:text-lg shadow-2xl shadow-[#996600]/40 hover:shadow-[#996600]/60 transition-all"
+                    >
+                      <Volume2 className="w-5 h-5" />
+                      <span>Begin · 开始体验</span>
+                    </motion.button>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Skip button — bottom right. Also doubles as the unlock gesture. */}
+            {/* Skip button — bottom right */}
             <div className="absolute bottom-8 right-8 z-50">
               <motion.button
                 initial={{ opacity: 0 }}
-                animate={{ opacity: videoDone ? 1 : 0.85 }}
+                animate={{ opacity: videoDone ? 1 : 0.7 }}
                 transition={{ delay: 1 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (!audioUnlocked) unlockAudio();
-                  handleSkipVideo();
-                }}
-                className="group px-5 py-2.5 rounded-full border border-white/20 bg-black/30 backdrop-blur-md text-white/85 text-sm hover:text-white hover:border-white/40 transition-all"
+                onClick={handleSkipVideo}
+                className="group px-5 py-2.5 rounded-full border border-white/20 bg-black/30 backdrop-blur-md text-white/75 text-sm hover:text-white hover:border-white/40 transition-all"
               >
                 <span className="relative">
                   Skip intro
