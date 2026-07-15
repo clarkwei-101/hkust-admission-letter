@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
@@ -9,7 +9,7 @@ import AIClubBanner from '@/components/AIClubBanner/AIClubBanner';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 import { LanguageSwitcher } from '@/components/Providers/Providers';
-import { Sparkles, Edit3, Check, X } from 'lucide-react';
+import { Sparkles, Edit3, Check, X, Volume2 } from 'lucide-react';
 
 const ParticleBackground = dynamic(
   () => import('@/components/ParticleBackground/ParticleBackground'),
@@ -29,10 +29,28 @@ export default function HomePage() {
   const [soundEnabled] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [videoDone, setVideoDone] = useState(false);
+  // Browsers (Chrome/Safari) reject autoplay with audio unless it follows a
+  // user gesture, so we start muted and unmute on first interaction.
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
+  const [showSoundHint, setShowSoundHint] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const handleVideoEnd = () => setVideoDone(true);
-  const handleSkipVideo = () => setVideoDone(true);
+  const handleVideoEnd = useCallback(() => setVideoDone(true), []);
+
+  const handleSkipVideo = useCallback(() => setVideoDone(true), []);
+
+  const unlockAudio = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    v.volume = 0.85;
+    // If the video already played muted through, restart so the audio
+    // comes in from the beginning (matches the visual now playing).
+    v.currentTime = 0;
+    v.play().catch(() => {});
+    setAudioUnlocked(true);
+    setShowSoundHint(false);
+  }, []);
 
   useEffect(() => {
     if (!videoDone || stage !== 'intro') return;
@@ -74,28 +92,57 @@ export default function HomePage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
             className="fixed inset-0 z-40"
+            onClick={!audioUnlocked ? unlockAudio : undefined}
           >
-            {/* Video — full brightness, with sound */}
+            {/* Video — full brightness, plays muted by default so the browser
+                allows autoplay; unmute happens on the first user click via
+                unlockAudio (which is wired to the entire intro surface below). */}
             <video
               ref={videoRef}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover cursor-pointer"
               src="/landing-hero.mp4"
               autoPlay
+              muted={!audioUnlocked}
               playsInline
               onEnded={handleVideoEnd}
             />
 
             {/* Light overlay so text overlay is readable */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-[#000d1a]/20 to-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-[#000d1a]/20 to-black/30 pointer-events-none" />
 
-            {/* Skip button — bottom right */}
+            {/* Sound-on hint — visible until the user clicks anywhere.
+                The whole intro stage already has an onClick handler, so this
+                is purely a visual nudge (no extra listener). */}
+            <AnimatePresence>
+              {showSoundHint && (
+                <motion.div
+                  key="sound-hint"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 12 }}
+                  transition={{ duration: 0.4 }}
+                  className="absolute top-8 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+                >
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/45 backdrop-blur-md border border-white/15 text-white/85 text-xs">
+                    <Volume2 className="w-3.5 h-3.5 text-[#d4a84b]" />
+                    <span>Click anywhere to enable sound · 点击任意位置开启声音</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Skip button — bottom right. Also doubles as the unlock gesture. */}
             <div className="absolute bottom-8 right-8 z-50">
               <motion.button
                 initial={{ opacity: 0 }}
-                animate={{ opacity: videoDone ? 1 : 0.6 }}
+                animate={{ opacity: videoDone ? 1 : 0.85 }}
                 transition={{ delay: 1 }}
-                onClick={handleSkipVideo}
-                className="group px-5 py-2.5 rounded-full border border-white/20 bg-black/30 backdrop-blur-md text-white/70 text-sm hover:text-white hover:border-white/40 transition-all"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!audioUnlocked) unlockAudio();
+                  handleSkipVideo();
+                }}
+                className="group px-5 py-2.5 rounded-full border border-white/20 bg-black/30 backdrop-blur-md text-white/85 text-sm hover:text-white hover:border-white/40 transition-all"
               >
                 <span className="relative">
                   Skip intro
