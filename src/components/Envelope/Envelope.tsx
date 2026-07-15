@@ -5,7 +5,6 @@ import { gsap } from 'gsap';
 import { motion } from 'framer-motion';
 import { Mail, Sparkles, GraduationCap, MapPin, Calendar, Users, PartyPopper } from 'lucide-react';
 import Fireworks from '@/components/Fireworks/Fireworks';
-import { playSealCrack, playUnfoldSwoosh } from '@/lib/sounds/sounds';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 
@@ -67,16 +66,23 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
     });
   }, [isOpening]);
 
+  const openSfxRef = useRef<HTMLAudioElement>(null);
+
   const handleOpen = useCallback(() => {
     if (isOpening) return;
     setIsOpening(true);
 
+    // Open sound — user-supplied mixkit applause WAV
+    if (openSfxRef.current) {
+      openSfxRef.current.currentTime = 0;
+      openSfxRef.current.volume = 0.9;
+      openSfxRef.current.play().catch(() => {});
+    }
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
+      audioRef.current.volume = 0.6;
       audioRef.current.play().catch(() => {});
     }
-    playSealCrack();
-    setTimeout(() => playUnfoldSwoosh(), 200);
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -107,6 +113,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
 
   const handleContinue = useCallback(() => {
     if (audioRef.current) audioRef.current.pause();
+    if (openSfxRef.current) openSfxRef.current.pause();
     setIsTransitioning(true);
     setTimeout(() => onOpenComplete(), 600);
   }, [onOpenComplete]);
@@ -362,6 +369,9 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
 
   return (
     <div ref={containerRef} className="relative w-full max-w-2xl mx-auto px-2">
+      {/* Open SFX — user-supplied WAV (mixkit ending-show applause) */}
+      <audio ref={openSfxRef} src="/admission-applause.wav" preload="auto" />
+
       {/* Decorative particles around envelope */}
       {!isOpening &&
         PARTICLE_POSITIONS.map((config, i) => (

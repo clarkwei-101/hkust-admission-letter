@@ -109,11 +109,11 @@ export default function HomePage() {
 
       {/* ═══ LANDING PAGE — HKUST deep-blue + gold background ═══ */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Deep blue gradient base */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000d1f] via-[#001030] to-[#000a1a]" />
+        {/* Light gold/dark gradient to deepen the PersistentVideo's look without hiding it */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000d1f]/30 via-transparent to-[#000a1a]/50" />
 
-        {/* Animated particle field */}
-        <ParticleBackground particleCount={60} color="#996600" />
+        {/* Animated particle field — gold accents that float above the video */}
+        <ParticleBackground particleCount={50} color="#996600" />
 
         {/* Decorative gold lines — top */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#996600]/50 to-transparent" />
@@ -125,14 +125,6 @@ export default function HomePage() {
 
         {/* Right vertical accent */}
         <div className="absolute right-0 top-1/4 bottom-1/4 w-px bg-gradient-to-b from-transparent via-[#996600]/30 to-transparent" />
-
-        {/* Subtle dot grid */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #996600 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-
-        {/* Center glow */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[500px] h-[500px] rounded-full bg-[#003366]/20 blur-[120px]" />
-        </div>
       </div>
 
       {/* ═══ Content layers ═══ */}
