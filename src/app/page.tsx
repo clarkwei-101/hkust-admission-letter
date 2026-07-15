@@ -51,12 +51,16 @@ export default function HomePage() {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.muted = true;
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch((e) => console.error('[intro] video.play failed:', e));
     }
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
       audioRef.current.volume = 0.85;
-      audioRef.current.play().catch(() => {});
+      const p = audioRef.current.play();
+      if (p && typeof p.then === 'function') {
+        p.then(() => console.log('[intro] audio.play() resolved — sound is on'))
+          .catch((e) => console.error('[intro] audio.play() rejected:', e.name, e.message));
+      }
     }
     setAudioStarted(true);
     setShowBeginCta(false);
