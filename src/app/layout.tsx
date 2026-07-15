@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Source_Sans_3, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { ClientProviders } from "@/components/Providers/Providers";
-import PersistentVideo from "@/components/PersistentVideo/PersistentVideo";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
@@ -42,7 +41,6 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <PersistentVideo />
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>

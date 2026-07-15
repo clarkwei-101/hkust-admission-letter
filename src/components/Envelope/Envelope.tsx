@@ -33,7 +33,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
   const [isLetterExpanded, setIsLetterExpanded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentBlessing] = useState(() => BLESSINGS[Math.floor(Math.random() * BLESSINGS.length)]);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const letterAudioRef = useRef<HTMLAudioElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const envelopeRef = useRef<HTMLDivElement>(null);
   const topFlapRef = useRef<HTMLDivElement>(null);
@@ -42,6 +42,18 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
   const glowRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const particlesInitialized = useRef(false);
+
+  // Play applause as soon as the letter expands (covers both Open Letter click
+  // and the user clicking Continue to /hub — the same audio element is
+  // re-triggered from currentTime=0).
+  useEffect(() => {
+    if (!isLetterExpanded) return;
+    const audio = letterAudioRef.current;
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.volume = 0.7;
+    audio.play().catch(() => {});
+  }, [isLetterExpanded]);
 
   useEffect(() => {
     if (!containerRef.current || isOpening || particlesInitialized.current) return;
@@ -68,20 +80,44 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
 
   const openSfxRef = useRef<HTMLAudioElement>(null);
 
+  // Unlock browser audio context on mount — Chromium/Safari block any later
+  // play() that isn't preceded by a user gesture, so we prime the audio
+  // element with a muted, near-silent play right after the first user click
+  // anywhere on the document.
+  useEffect(() => {
+    const audio = openSfxRef.current;
+    if (!audio) return;
+
+    const unlock = () => {
+      audio.muted = true;
+      audio.volume = 0;
+      audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.muted = false;
+        audio.volume = 0.9;
+      }).catch(() => {});
+      document.removeEventListener('pointerdown', unlock);
+      document.removeEventListener('keydown', unlock);
+    };
+
+    document.addEventListener('pointerdown', unlock, { once: true });
+    document.addEventListener('keydown', unlock, { once: true });
+    return () => {
+      document.removeEventListener('pointerdown', unlock);
+      document.removeEventListener('keydown', unlock);
+    };
+  }, []);
+
   const handleOpen = useCallback(() => {
     if (isOpening) return;
     setIsOpening(true);
 
-    // Open sound — user-supplied mixkit applause WAV
+    // Open sound — user-supplied mixkit applause MP3 (small, fast to load)
     if (openSfxRef.current) {
       openSfxRef.current.currentTime = 0;
       openSfxRef.current.volume = 0.9;
       openSfxRef.current.play().catch(() => {});
-    }
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.volume = 0.6;
-      audioRef.current.play().catch(() => {});
     }
 
     const tl = gsap.timeline({
@@ -112,8 +148,12 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
   }, [isOpening]);
 
   const handleContinue = useCallback(() => {
-    if (audioRef.current) audioRef.current.pause();
-    if (openSfxRef.current) openSfxRef.current.pause();
+    // Replay applause to celebrate the transition into the hub page.
+    if (letterAudioRef.current) {
+      letterAudioRef.current.currentTime = 0;
+      letterAudioRef.current.volume = 0.7;
+      letterAudioRef.current.play().catch(() => {});
+    }
     setIsTransitioning(true);
     setTimeout(() => onOpenComplete(), 600);
   }, [onOpenComplete]);
@@ -132,8 +172,8 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
         {/* Fireworks */}
         <Fireworks active={true} duration={6000} />
 
-        {/* Audio */}
-        <audio ref={audioRef} src="/admission-applause.wav" preload="auto" />
+        {/* Audio — small MP3, fast load */}
+        <audio ref={letterAudioRef} src="/admission-applause.mp3" preload="auto" />
 
         {/* Video — heavily blurred, decorative only */}
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -369,8 +409,8 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
 
   return (
     <div ref={containerRef} className="relative w-full max-w-2xl mx-auto px-2">
-      {/* Open SFX — user-supplied WAV (mixkit ending-show applause) */}
-      <audio ref={openSfxRef} src="/admission-applause.wav" preload="auto" />
+      {/* Open SFX — user-supplied MP3 (mixkit ending-show applause) */}
+      <audio ref={openSfxRef} src="/admission-applause.mp3" preload="auto" />
 
       {/* Decorative particles around envelope */}
       {!isOpening &&
