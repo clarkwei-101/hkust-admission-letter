@@ -47,33 +47,20 @@ export default function HomePage() {
   const beginExperience = useCallback(() => {
     // Hard rewind the muted video so the audio + visual stay perfectly in
     // sync from this point onwards. The audio element is independent and
-    // gets its own play() call inside the user-gesture handler.
+    // gets its own play() call inside the user-gesture handler. This is
+    // the canonical Chromium- and Safari-compatible pattern: keep the
+    // <video> muted and feed sound through a separate <audio> element so
+    // its play() lives inside the user-gesture handler without touching
+    // the already-playing video element.
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.muted = true;
-      videoRef.current.play().catch((e) => console.error('[intro] video.play failed:', e));
+      videoRef.current.play().catch(() => {});
     }
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
       audioRef.current.volume = 0.85;
-      const p = audioRef.current.play();
-      if (p && typeof p.then === 'function') {
-        p.then(() => {
-          console.log('[intro] audio.play() resolved — sound is on');
-          // Make audio state observable via DOM (browsers don't pipe
-          // console.log back to headless harnesses reliably).
-          if (typeof document !== 'undefined') {
-            const probe = document.getElementById('intro-audio-probe');
-            if (probe) probe.setAttribute('data-audio-state', 'playing');
-          }
-        }).catch((e) => {
-          console.error('[intro] audio.play() rejected:', e.name, e.message);
-          if (typeof document !== 'undefined') {
-            const probe = document.getElementById('intro-audio-probe');
-            if (probe) probe.setAttribute('data-audio-state', `blocked:${e.name}`);
-          }
-        });
-      }
+      audioRef.current.play().catch(() => {});
     }
     setAudioStarted(true);
     setShowBeginCta(false);
@@ -145,15 +132,6 @@ export default function HomePage() {
 
             {/* Light overlay so text overlay is readable */}
             <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-[#000d1a]/20 to-black/30 pointer-events-none" />
-
-            {/* Hidden probe — used purely for QA: a Playwright-style harness
-                can read [data-audio-state] to confirm audio.play() outcome. */}
-            <div
-              id="intro-audio-probe"
-              data-audio-state="idle"
-              style={{ position: 'absolute', left: '-9999px', top: 0, width: 1, height: 1 }}
-              aria-hidden="true"
-            />
 
             {/* Begin CTA — required user gesture that starts the audio.
                 Stays visible until the user taps it. After it dismisses
