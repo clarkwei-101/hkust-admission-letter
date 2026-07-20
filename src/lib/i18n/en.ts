@@ -38,7 +38,7 @@ const en = {
       seal: 'Admissions Office · HKUST',
       fromLabel: 'From',
       toLabel: 'For',
-      degree: `Class of ${ADMISSION_YEAR} · Offer Holder`,
+      degree: '2026 Intake · Offer Holder',
     },
     transitionMessage: 'Opening your journey',
     transitionHint: 'One moment...',

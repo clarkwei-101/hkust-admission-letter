@@ -225,7 +225,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
               transition={{ delay: 0.5 }}
               className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-[#996600]/70 mb-3"
             >
-              CLASS OF {ADMISSION_YEAR} · OFFICIAL INVITATION
+              2026 INTAKE · OFFICIAL INVITATION
             </motion.p>
 
             <motion.h1
@@ -272,7 +272,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
               {displayName}
             </p>
             <p className="text-[#C0C0C0] mt-4 md:mt-5 text-sm md:text-base tracking-widest">
-              Class of {ADMISSION_YEAR} · Offer Holder
+              2026 Intake · Offer Holder
             </p>
           </motion.div>
 
@@ -297,7 +297,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
                 <span className="text-[10px] md:text-xs uppercase tracking-widest text-[#996600]">Welcome</span>
               </div>
               <p className="text-white/80 text-sm md:text-base leading-relaxed">
-                We are delighted to officially welcome you to the Hong Kong University of Science and Technology — Class of {ADMISSION_YEAR}.
+                We are delighted to officially welcome you to the Hong Kong University of Science and Technology — Class of 2026 (Intake).
               </p>
             </div>
 

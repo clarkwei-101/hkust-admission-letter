@@ -149,7 +149,7 @@ export default function HomePage() {
                   <div className="text-center space-y-6 max-w-md">
                     <div className="flex items-center justify-center gap-2 text-[#d4a84b] text-xs uppercase tracking-[0.3em]">
                       <span className="w-10 h-px bg-[#d4a84b]/60" />
-                      HKUST · Class of {ADMISSION_YEAR}
+                      HKUST · 2026 Intake
                       <span className="w-10 h-px bg-[#d4a84b]/60" />
                     </div>
                     <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight">
@@ -265,7 +265,7 @@ export default function HomePage() {
               transition={{ delay: 0.35 }}
               className="text-white/60 text-xs mb-10 tracking-[0.35em] uppercase"
             >
-              Class of {ADMISSION_YEAR} · Admission Invitation
+              2026 Intake · Admission Invitation
             </motion.p>
 
             {/* Name card */}

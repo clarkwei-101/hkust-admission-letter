@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bus, ArrowRight, ArrowLeftRight, RefreshCw, Clock, Users, Coffee, MapPin, ShowerHead,
   BookOpen, Wifi, Utensils, Heart, Volume2, Accessibility, Compass, Phone, Search,
+  ExternalLink,
 } from 'lucide-react';
 import Navigation from '@/components/Navigation/Navigation';
 import AIClubBanner from '@/components/AIClubBanner/AIClubBanner';
@@ -323,6 +324,17 @@ export default function CampusLivePage() {
                     Estimated walking time: <span className="text-[#d4a84b] font-semibold">5 min</span> via Atrium.
                   </p>
                 </div>
+
+                {/* Open in Google Maps */}
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=22.2525,114.2145&travelmode=walking`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-[#003366]/40 border border-white/10 text-white/70 text-sm hover:bg-[#003366]/60 hover:text-white transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Open in Google Maps · Walking directions
+                </a>
               </div>
 
               {/* Map */}
@@ -330,68 +342,107 @@ export default function CampusLivePage() {
                 <svg viewBox="0 0 100 100" className="w-full h-auto">
                   <defs>
                     <linearGradient id="mapBg" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#0d1f3c" />
-                      <stop offset="100%" stopColor="#061018" />
+                      <stop offset="0%" stopColor="#1a3a5c" />
+                      <stop offset="100%" stopColor="#0d2540" />
                     </linearGradient>
                   </defs>
                   <rect width="100" height="100" fill="url(#mapBg)" />
 
-                  {/* Buildings */}
-                  {BUILDINGS_PINS.map((b) => {
-                    const isFrom = b.id === from;
-                    const isTo = b.id === to;
-                    const isActive = isFrom || isTo;
-                    return (
-                      <g key={b.id}>
-                        {isActive && (
-                          <circle cx={b.x} cy={b.y} r="5" fill="none" stroke="#d4a84b" strokeWidth="0.3">
-                            <animate attributeName="r" from="5" to="8" dur="1.5s" repeatCount="indefinite" />
-                            <animate attributeName="opacity" from="0.8" to="0" dur="1.5s" repeatCount="indefinite" />
-                          </circle>
-                        )}
-                        <circle
-                          cx={b.x}
-                          cy={b.y}
-                          r={isActive ? 3 : 2}
-                          fill={isFrom ? '#2E7D32' : isTo ? '#FF6B35' : '#996600'}
-                          stroke={isActive ? '#fff' : 'none'}
-                          strokeWidth="0.2"
-                        />
+                  {/* Grid lines for visual context */}
+                  <g stroke="#C0C0C0" strokeWidth="0.08" opacity="0.08">
+                    {[20, 40, 60, 80].map((v) => (
+                      <g key={v}>
+                        <line x1="0" y1={v} x2="100" y2={v} />
+                        <line x1={v} y1="0" x2={v} y2="100" />
                       </g>
-                    );
-                  })}
+                    ))}
+                  </g>
+
+                  {/* Campus boundary */}
+                  <rect x="5" y="20" width="90" height="75" fill="none" stroke="#60A5FA" strokeWidth="0.15" strokeDasharray="1,0.5" opacity="0.3" rx="2" />
+
+                  {/* Roads */}
+                  <g stroke="#d4a84b" strokeWidth="0.25" fill="none" opacity="0.35">
+                    <path d="M 10,55 L 90,55" />
+                    <path d="M 50,20 L 50,90" />
+                    <path d="M 18,50 Q 35,60 50,70 Q 65,80 82,52" />
+                  </g>
 
                   {/* Route line */}
-                  {BUILDINGS_PINS.map((b) => b.id === from || b.id === to) && (() => {
+                  {(() => {
                     const fromB = BUILDINGS_PINS.find((p) => p.id === from);
                     const toB = BUILDINGS_PINS.find((p) => p.id === to);
                     if (!fromB || !toB) return null;
                     const mx = (fromB.x + toB.x) / 2;
                     const my = (fromB.y + toB.y) / 2 - 8;
                     return (
-                      <g key="route">
+                      <g key={`route-${from}-${to}`}>
+                        <path
+                          d={`M ${fromB.x},${fromB.y} Q ${mx},${my} ${toB.x},${toB.y}`}
+                          stroke="rgba(0,0,0,0.4)"
+                          strokeWidth="1.2"
+                          fill="none"
+                        />
                         <path
                           d={`M ${fromB.x},${fromB.y} Q ${mx},${my} ${toB.x},${toB.y}`}
                           stroke="#d4a84b"
-                          strokeWidth="0.5"
+                          strokeWidth="0.9"
                           strokeDasharray="2,1"
                           fill="none"
                         />
-                        <circle cx={mx} cy={my} r="1" fill="#d4a84b" />
+                        <circle cx={toB.x} cy={toB.y} r="1.2" fill="#FF6B35" stroke="#fff" strokeWidth="0.2" />
                       </g>
                     );
                   })()}
 
+                  {/* Buildings */}
+                  {BUILDINGS_PINS.map((b) => {
+                    const isFrom = b.id === from;
+                    const isTo = b.id === to;
+                    const isActive = isFrom || isTo;
+                    const color = isFrom ? '#2E7D32' : isTo ? '#FF6B35' : '#60A5FA';
+                    return (
+                      <g key={b.id}>
+                        {isActive && (
+                          <circle cx={b.x} cy={b.y} r="5" fill="none" stroke={color} strokeWidth="0.3">
+                            <animate attributeName="r" from="4" to="8" dur="1.5s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" from="0.8" to="0" dur="1.5s" repeatCount="indefinite" />
+                          </circle>
+                        )}
+                        <circle
+                          cx={b.x}
+                          cy={b.y}
+                          r={isActive ? 2.5 : 2}
+                          fill={color}
+                          stroke={isActive ? '#fff' : 'none'}
+                          strokeWidth="0.3"
+                        />
+                        <text
+                          x={b.x}
+                          y={b.y - 3.5}
+                          fill="white"
+                          fontSize="2"
+                          textAnchor="middle"
+                          fontWeight="bold"
+                        >
+                          {isZh ? b.name.zh : b.name.en}
+                        </text>
+                      </g>
+                    );
+                  })}
+
                   {/* Compass */}
                   <g transform="translate(92, 92)">
-                    <circle r="3" fill="#003366" stroke="#996600" strokeWidth="0.2" />
-                    <text y="-1" fontSize="1.8" fill="white" textAnchor="middle">N</text>
+                    <circle r="3.5" fill="#003366" stroke="#996600" strokeWidth="0.25" />
+                    <text y="-1" fontSize="1.8" fill="white" textAnchor="middle" fontWeight="bold">N</text>
+                    <line x1="0" y1="-2.5" x2="0" y2="1.5" stroke="#d4a84b" strokeWidth="0.2" />
                   </g>
                 </svg>
 
-                <div className="flex items-center justify-center gap-4 text-xs mt-2">
-                  <span className="flex items-center gap-1.5 text-white/70"><span className="w-2 h-2 rounded-full bg-[#2E7D32]" /> From</span>
-                  <span className="flex items-center gap-1.5 text-white/70"><span className="w-2 h-2 rounded-full bg-[#FF6B35]" /> To</span>
+                <div className="flex items-center justify-center gap-4 text-xs mt-2 text-white/60">
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#2E7D32]" /> From</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#FF6B35]" /> To</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#60A5FA]" /> Landmark</span>
                 </div>
               </div>
             </div>
