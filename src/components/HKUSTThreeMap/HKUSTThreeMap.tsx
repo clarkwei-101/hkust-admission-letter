@@ -4,392 +4,569 @@
 // Copyright (c) 2026 宋夏天Dazzle / Based on three-scope-map-skill
 // 作者全平台ID：宋夏天Dazzle；公众号：送你整个夏天
 // Source: https://github.com/songsummer920-dazzle/three-scope-map-skill
-// Adapted for HKUST campus map
+// Adapted for HKUST campus map — real building footprints + multi-level towers
 
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { GeoFeatureCollection } from './hkustGeo';
 
-// ── HKUST colour theme (deep blue + gold, matching the site) ───────────────
+// ── Campus theme (HKUST deep blue + gold) ────────────────────────────────
 const C = {
-  // Main accent — gold from HKUST palette
   gold: '#d4a84b',
-  goldLight: '#e8c87a',
-  // Side-wall gradient (top → mid → bottom)
-  sideTop: '#d4a84b',
-  sideMid: '#8b6914',
-  sideBot: '#1a0d00',
-  // Top surface
-  topBase: '#0a1a2e',
-  topEmissive: '#0d2040',
-  // Outlines
-  outline: '#d4a84b',
-  outlineDim: '#7a5c20',
-  // Hover / glow
-  hover: '#ffe4a0',
-  // Ambient light
-  ambient: '#b0d0ff',
-  // Bay/water colour
+  goldLight: '#ffe4a0',
+  goldDeep: '#8b6914',
+  ambientBlue: '#b0d0ff',
+  directional: '#fff4d0',
   bay: '#0a3a5c',
+  sea: '#062038',
+  outline: '#d4a84b',
 };
 
+// Map dimensions (virtual canvas)
 const MAP_W = 1000;
 const MAP_H = 600;
-const TOP_Z = 44;
-const SIDE_TOP_Z = 44;
-const SIDE_BOT_Z = 24;
-const BASE_Z = 20;
 
-// ── Building category colours for top surface ───────────────────────────────
-const CAT_COLORS: Record<string, { base: string; emissive: string; sideTop: string }> = {
-  academic: { base: '#0a1e3d', emissive: '#0d2850', sideTop: '#d4a84b' },
-  life: { base: '#1a1500', emissive: '#2a2000', sideTop: '#e8c87a' },
-  landscape: { base: '#061a0a', emissive: '#0a2a10', sideTop: '#7ac87a' },
+// ── Per-category colour schemes ──────────────────────────────────────────
+const CAT: Record<'academic' | 'life' | 'landscape', {
+  body: string;
+  bodyEmissive: string;
+  accent: string;
+  roof: string;
+  light: string;
+}> = {
+  academic: {
+    body: '#1a3a6e',
+    bodyEmissive: '#0d2850',
+    accent: '#d4a84b',
+    roof: '#0a1e3d',
+    light: '#b0d0ff',
+  },
+  life: {
+    body: '#3a2a10',
+    bodyEmissive: '#2a1800',
+    accent: '#e8c87a',
+    roof: '#1a1000',
+    light: '#ffd690',
+  },
+  landscape: {
+    body: '#0a3015',
+    bodyEmissive: '#0a2a10',
+    accent: '#7ac87a',
+    roof: '#061a0a',
+    light: '#a0e0a0',
+  },
 };
 
-// ── Side wall gradient shader ───────────────────────────────────────────────
-const sideWallVert = `
-  varying float vDepth;
-  void main() {
-    vDepth = clamp((position.z - 24.0) / 20.0, 0.0, 1.0);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-const sideWallFrag = `
-  varying float vDepth;
-  void main() {
-    vec3 top = vec3(0.831, 0.659, 0.294);
-    vec3 mid = vec3(0.545, 0.412, 0.078);
-    vec3 bot = vec3(0.102, 0.051, 0.0);
-    vec3 lower = mix(bot, mid, smoothstep(0.0, 0.24, vDepth));
-    vec3 col = mix(lower, top, smoothstep(0.34, 1.0, vDepth));
-    float edgeGlow = smoothstep(0.48, 1.0, vDepth);
-    col += edgeGlow * top * 0.24;
-    float alpha = 0.46 + vDepth * 0.54;
-    gl_FragColor = vec4(col, alpha);
-  }
-`;
-
-// ── Floor gradient shader ───────────────────────────────────────────────────
-const floorVert = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-const floorFrag = `
-  varying vec2 vUv;
-  void main() {
-    vec3 col1 = vec3(0.051, 0.102, 0.235);
-    vec3 col2 = vec3(0.020, 0.051, 0.120);
-    vec3 col = mix(col2, col1, vUv.y);
-    gl_FragColor = vec4(col, 0.92);
-  }
-`;
-
-// ── Helpers ────────────────────────────────────────────────────────────────
-function projectCoord(x: number, y: number) {
-  return new THREE.Vector3(x - MAP_W / 2, -(y - MAP_H / 2), 0);
+// ── Helper: project screen coords → 3D world coords ──────────────────────
+function projectCoord(x: number, y: number, z = 0): THREE.Vector3 {
+  return new THREE.Vector3(x - MAP_W / 2, -(y - MAP_H / 2), z);
 }
 
-function makeShape(rect: number[][]) {
-  const pts = rect.map(([x, y]) => new THREE.Vector2(x - MAP_W / 2, -(y - MAP_H / 2)));
-  const shape = new THREE.Shape(pts);
-  return shape;
+function makeShape(ring: number[][]): THREE.Shape {
+  // Convert screen-space polygon to Shape centred at origin
+  const points2d = ring.map(([x, y]) => new THREE.Vector2(x - MAP_W / 2, -(y - MAP_H / 2)));
+  // Ensure CCW for shape (Three.js expects CCW for outer ring)
+  return new THREE.Shape(points2d);
 }
 
-function getFeatureName(f: GeoFeatureCollection['features'][number]) {
-  return f.properties?.name ?? '';
+function getCentroid(ring: number[][]): { x: number; y: number } {
+  let cx = 0, cy = 0;
+  for (const [x, y] of ring) {
+    cx += x;
+    cy += y;
+  }
+  return { x: cx / ring.length, y: cy / ring.length };
 }
 
-// ── Campus Mesh ─────────────────────────────────────────────────────────────
-function CampusMesh({
-  data,
-  onSelect,
+// ── Window-grid texture ──────────────────────────────────────────────────
+function makeWindowTexture(category: string): THREE.Texture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d')!;
+
+  // Background dark
+  ctx.fillStyle = category === 'academic' ? '#0a1e3d' : '#1a1000';
+  ctx.fillRect(0, 0, 256, 256);
+
+  // Window grid
+  const cols = 12;
+  const rows = 16;
+  const cellW = 256 / cols;
+  const cellH = 256 / rows;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const lit = (r * 7 + c * 11 + 13) % 4 === 0;
+      const x = c * cellW + cellW * 0.2;
+      const y = r * cellH + cellH * 0.15;
+      const w = cellW * 0.6;
+      const h = cellH * 0.6;
+      if (lit) {
+        ctx.fillStyle = category === 'academic' ? '#a8c8ff' : '#ffd690';
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = ctx.fillStyle;
+      } else {
+        ctx.fillStyle = '#0a0a14';
+      }
+      ctx.fillRect(x, y, w, h);
+    }
+  }
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function makeRoofTexture(): THREE.Texture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d')!;
+  ctx.fillStyle = '#0a1e3d';
+  ctx.fillRect(0, 0, 256, 256);
+  // Subtle rooftop machinery outline
+  ctx.strokeStyle = '#1a3a6e';
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 4; i++) {
+    ctx.strokeRect(20 + i * 50, 20 + i * 30, 60, 60);
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+// ── A single building, extruded with proper height ──────────────────────
+function Building({
+  feature,
+  onHover,
   selected,
 }: {
-  data: GeoFeatureCollection;
-  onSelect: (id: string | null) => void;
+  feature: GeoFeatureCollection['features'][number];
+  onHover: (id: string | null) => void;
   selected: string | null;
 }) {
-  const meshesRef = useRef<THREE.Mesh[]>([]);
-  const sideMatsRef = useRef<THREE.ShaderMaterial[]>([]);
-  const glowMatsRef = useRef<THREE.MeshBasicMaterial[]>([]);
-  const groupRef = useRef<THREE.Group>(null);
+  const id = feature.properties.id;
+  const ring = feature.geometry.coordinates[0] as number[][];
+  const h = feature.properties.height;
+  const cat = feature.properties.category;
+  const cfg = CAT[cat];
+  const isSelected = selected === id;
 
-  const meshEntries = data.features.map((feature) => {
-    const coords = feature.geometry.coordinates as number[][][];
-    const ring = coords[0];
-    const h = feature.properties?.height ?? 2;
-    const cat = feature.properties?.category ?? 'academic';
-    const catCfg = CAT_COLORS[cat] ?? CAT_COLORS.academic;
+  const shape = useMemo(() => makeShape(ring), [ring]);
+  const winTex = useMemo(() => makeWindowTexture(cat), [cat]);
+  const roofTex = useMemo(() => makeRoofTexture(), []);
+  const baseZ = 0;
 
-    return { feature, ring, h, cat, catCfg };
-  });
+  // Configure textures based on silhouette footprint scale
+  const shapeRect = useMemo(() => {
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    ring.forEach(([x, y]) => {
+      minX = Math.min(minX, x - MAP_W / 2);
+      maxX = Math.max(maxX, x - MAP_W / 2);
+      minY = Math.min(minY, -(y - MAP_H / 2));
+      maxY = Math.max(maxY, -(y - MAP_H / 2));
+    });
+    return { w: maxX - minX, h: maxY - minY };
+  }, [ring]);
+  const widthM = shapeRect.w;
+  const depthM = shapeRect.h;
+  useMemo(() => {
+    const tilesX = Math.max(1, Math.round(widthM / 22));
+    const tilesY = Math.max(1, Math.round(depthM / 22));
+    winTex.repeat.set(tilesX, h);
+    winTex.needsUpdate = true;
+    roofTex.repeat.set(Math.max(1, Math.round(widthM / 18)), Math.max(1, Math.round(depthM / 18)));
+    roofTex.needsUpdate = true;
+  }, [widthM, depthM, h]);
 
-  useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    // Subtle float animation
-    if (groupRef.current) {
-      groupRef.current.position.z = Math.sin(t * 0.4) * 1.5;
+  // Bevel settings for nicer corners
+  const extrudeSettings: THREE.ExtrudeGeometryOptions = {
+    depth: h * 10,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    bevelSize: 0.6,
+    bevelThickness: 0.4,
+    steps: 1,
+  };
+
+  const geom = useMemo(() => new THREE.ExtrudeGeometry(shape, extrudeSettings), [shape]);
+  geom.computeVertexNormals();
+
+  // ── Different silhouettes (stepped, terraced, towers) ──
+  const silhouette = feature.properties.silhouette ?? 'podium';
+
+  // Hover lift
+  const meshRef = useRef<THREE.Mesh>(null);
+  useFrame(() => {
+    if (meshRef.current) {
+      const targetY = isSelected ? 6 : 0;
+      meshRef.current.position.y = THREE.MathUtils.lerp(
+        meshRef.current.position.y,
+        targetY,
+        0.1,
+      );
     }
-    // Update side wall uniforms
-    sideMatsRef.current.forEach((mat) => {
-      mat.uniforms.uTime.value = t;
-    });
-    // Pulse outline on selected
-    meshesRef.current.forEach((mesh) => {
-      const name = mesh.userData.featureId as string;
-      if (name === selected) {
-        mesh.rotation.z = Math.sin(t * 2) * 0.005;
-      }
-    });
-    // Glow pulse on selected
-    glowMatsRef.current.forEach((mat) => {
-      const name = mat.userData.featureId as string;
-      if (name === selected) {
-        mat.opacity = 0.12 + Math.sin(t * 3) * 0.06;
-      } else {
-        mat.opacity = 0.02;
-      }
-    });
   });
+
+  // Materials
+  const bodyMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    map: winTex,
+    color: cfg.body,
+    emissive: cfg.bodyEmissive,
+    emissiveIntensity: 0.4,
+    emissiveMap: winTex,
+    roughness: 0.6,
+    metalness: 0.4,
+  }), [cfg]);
+
+  const roofMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    map: roofTex,
+    color: cfg.roof,
+    emissive: cfg.bodyEmissive,
+    emissiveIntensity: 0.15,
+    roughness: 0.85,
+    metalness: 0.2,
+  }), [cfg, roofTex]);
+
+  const outlineMaterial = useMemo(() => new THREE.LineBasicMaterial({
+    color: C.outline,
+    transparent: true,
+    opacity: isSelected ? 1.0 : 0.55,
+  }), [isSelected]);
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]}>
-      {meshEntries.map(({ feature, ring, h, cat, catCfg }) => {
-        const id = feature.properties.id;
-        const pts2d = ring.map(([x, y]) => new THREE.Vector2(x - MAP_W / 2, -(y - MAP_H / 2)));
-        const shape = new THREE.Shape(pts2d);
-        // Find centroid for building height extrusion
-        const cx = pts2d.reduce((s, p) => s + p.x, 0) / pts2d.length;
-        const cy = pts2d.reduce((s, p) => s + p.y, 0) / pts2d.length;
+    <group position={[0, baseZ, 0]}>
+      {/* Base footprint shadow / slab */}
+      <mesh
+        position={[0, -0.5, 0.2]}
+        onPointerEnter={() => onHover(id)}
+        onPointerLeave={() => onHover(null)}
+        onClick={(e) => { e.stopPropagation(); }}
+      >
+        <shapeGeometry args={[shape]} />
+        <meshStandardMaterial
+          color="#02080f"
+          transparent
+          opacity={0.55}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
 
-        const topColor = new THREE.Color(catCfg.base);
-        const emissiveColor = new THREE.Color(catCfg.emissive);
-        const sideTopColor = new THREE.Color(catCfg.sideTop);
+      {/* Main 3D extruded body */}
+      <mesh
+        ref={meshRef}
+        geometry={geom}
+        position={[0, 0, 0]}
+        rotation={[0, 0, 0]}
+        onPointerEnter={() => onHover(id)}
+        onPointerLeave={() => onHover(null)}
+      >
+        <meshStandardMaterial
+          map={winTex}
+          color={cfg.body}
+          emissive={cfg.bodyEmissive}
+          emissiveMap={winTex}
+          emissiveIntensity={isSelected ? 0.85 : 0.4}
+          roughness={0.55}
+          metalness={0.5}
+        />
+      </mesh>
 
-        return (
-          <group key={id}>
-            {/* Base / floor plate */}
-            <mesh
-              position={[0, 0, BASE_Z - h]}
-              userData={{ featureId: id }}
-              onPointerEnter={() => onSelect(id)}
-              onPointerLeave={() => onSelect(null)}
-              onClick={(e) => { e.stopPropagation(); onSelect(id); }}
-            >
-              <shapeGeometry args={[shape]} />
-              <meshBasicMaterial color={catCfg.base} transparent opacity={0.6} side={THREE.DoubleSide} />
-            </mesh>
+      {/* Roof cap (a shapeGeometry plane on top, slight brighter) */}
+      <mesh
+        position={[0, 0, h * 10 + 0.5]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <shapeGeometry args={[shape]} />
+        <meshStandardMaterial
+          color={cfg.accent}
+          emissive={cfg.light}
+          emissiveIntensity={isSelected ? 0.6 : 0.25}
+          roughness={0.5}
+          metalness={0.7}
+          side={THREE.DoubleSide}
+          transparent
+          opacity={0.92}
+        />
+      </mesh>
 
-            {/* 3D extruded building body */}
-            <mesh
-              position={[0, 0, BASE_Z - h]}
-              userData={{ featureId: id }}
-              onPointerEnter={() => onSelect(id)}
-              onPointerLeave={() => onSelect(null)}
-              onClick={(e) => { e.stopPropagation(); onSelect(id); }}
-            >
-              <extrudeGeometry args={[shape, {
-                depth: h,
-                bevelEnabled: false,
-              }]} />
-              <meshStandardMaterial
-                color={topColor}
-                emissive={emissiveColor}
-                emissiveIntensity={0.15}
-                roughness={0.8}
-                metalness={0.1}
-                transparent
-                opacity={0.88}
-                side={THREE.DoubleSide}
-              />
-            </mesh>
+      {/* Roof rim accent line */}
+      <mesh position={[0, 0, h * 10 + 0.6]}>
+        <shapeGeometry args={[shape]} />
+        <meshBasicMaterial
+          color={C.outline}
+          transparent
+          opacity={isSelected ? 0.6 : 0.3}
+          wireframe
+        />
+      </mesh>
 
-            {/* Gold outline ring */}
-            <lineSegments position={[0, 0, TOP_Z]}>
-              <edgesGeometry args={[new THREE.ShapeGeometry(shape)]} />
-              <lineBasicMaterial color={C.outline} transparent opacity={0.7} />
-            </lineSegments>
+      {/* Gold outline ring at top */}
+      <lineSegments position={[0, 0, h * 10 + 0.4]}>
+        <edgesGeometry args={[new THREE.ShapeGeometry(shape)]} />
+        <primitive object={outlineMaterial} attach="material" />
+      </lineSegments>
 
-            {/* Top surface glow */}
-            <mesh position={[0, 0, TOP_Z + 4]} userData={{ featureId: id + '_glow' }}>
-              <shapeGeometry args={[shape]} />
-              <meshBasicMaterial
-                color={C.goldLight}
-                transparent
-                opacity={0.02}
-                blending={THREE.AdditiveBlending}
-                depthWrite={false}
-                userData={{ featureId: id }}
-              />
-            </mesh>
-          </group>
-        );
-      })}
-
-      {/* Campus outline / boundary ring */}
-      {meshEntries[0] && (() => {
-        const allX = meshEntries.flatMap(e => e.ring.map(r => r[0]));
-        const allY = meshEntries.flatMap(e => e.ring.map(r => r[1]));
-        const minX = Math.min(...allX);
-        const maxX = Math.max(...allX);
-        const minY = Math.min(...allY);
-        const maxY = Math.max(...allY);
-        const boundaryShape = new THREE.Shape([
-          new THREE.Vector2(minX - MAP_W / 2, -(minY - MAP_H / 2)),
-          new THREE.Vector2(maxX - MAP_W / 2, -(minY - MAP_H / 2)),
-          new THREE.Vector2(maxX - MAP_W / 2, -(maxY - MAP_H / 2)),
-          new THREE.Vector2(minX - MAP_W / 2, -(maxY - MAP_H / 2)),
-          new THREE.Vector2(minX - MAP_W / 2, -(minY - MAP_H / 2)),
-        ]);
-        return (
-          <lineSegments position={[0, 0, TOP_Z + 6]}>
-            <edgesGeometry args={[new THREE.ShapeGeometry(boundaryShape)]} />
-            <lineBasicMaterial color={C.outline} transparent opacity={0.25} />
-          </lineSegments>
-        );
-      })()}
+      {/* Antenna / spire for towers */}
+      {(silhouette === 'tower' || silhouette === 'tower-stack') && (
+        <group position={[0, 0, h * 10 + 0.5]}>
+          <mesh position={[0, 0, 4]}>
+            <cylinderGeometry args={[0.4, 0.4, 8, 8]} />
+            <meshStandardMaterial color={cfg.accent} emissive={cfg.light} emissiveIntensity={0.4} metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0, 11]}>
+            <sphereGeometry args={[1.2, 12, 8]} />
+            <meshBasicMaterial color={C.goldLight} />
+          </mesh>
+        </group>
+      )}
     </group>
   );
 }
 
-// ── Camera controller ────────────────────────────────────────────────────────
-function CameraController() {
-  const { camera } = useThree();
-  useEffect(() => {
-    camera.position.set(0, -800, 420);
-    camera.lookAt(0, 0, 0);
-  }, [camera]);
-  return null;
+// ── Side-walls glow shader (vertical gradient) ────────────────────────────
+function makeSideWallMaterial(category: string): THREE.ShaderMaterial {
+  const cfg = CAT[category as keyof typeof CAT] ?? CAT.academic;
+  return new THREE.ShaderMaterial({
+    transparent: true,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    uniforms: {
+      uTopColor: { value: new THREE.Color(cfg.accent) },
+      uMidColor: { value: new THREE.Color(C.goldDeep) },
+      uBotColor: { value: new THREE.Color('#06080f') },
+      uTotalHeight: { value: 100 },
+    },
+    vertexShader: `
+      varying float vDepth;
+      uniform float uTotalHeight;
+      void main() {
+        vDepth = clamp(position.z / uTotalHeight, 0.0, 1.0);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 uTopColor;
+      uniform vec3 uMidColor;
+      uniform vec3 uBotColor;
+      varying float vDepth;
+      void main() {
+        vec3 lower = mix(uBotColor, uMidColor, smoothstep(0.0, 0.3, vDepth));
+        vec3 col = mix(lower, uTopColor, smoothstep(0.45, 1.0, vDepth));
+        float edgeGlow = smoothstep(0.6, 1.0, vDepth);
+        col += edgeGlow * uTopColor * 0.4;
+        float alpha = 0.55 + vDepth * 0.4;
+        gl_FragColor = vec4(col, alpha);
+      }
+    `,
+  });
 }
 
-// ── Animated fly lines ──────────────────────────────────────────────────────
-function FlyLines({ data }: { data: GeoFeatureCollection }) {
-  const groupRef = useRef<THREE.Group>(null);
+// ── Campus outline / boundary (chase light ring) ────────────────────────
+function ChaseLightRing() {
+  const points = useMemo(() => {
+    const pts: number[] = [];
+    const segs = 64;
+    for (let i = 0; i <= segs; i++) {
+      const a = (i / segs) * Math.PI * 2;
+      // Ellipse matching campus shape
+      pts.push(Math.cos(a) * 480, Math.sin(a) * 300, 60);
+    }
+    return new Float32Array(pts);
+  }, []);
 
-  const lineData = data.features.slice(0, 6).map((f, i) => {
-    const c = f.properties?.center as [number, number] ?? [500, 300];
-    return {
-      id: f.properties.id,
-      start: new THREE.Vector3(c[0] - MAP_W / 2, -(c[1] - MAP_H / 2), 70),
-    };
-  });
+  const groupRef = useRef<THREE.Group>(null);
+  const ringRef = useRef<THREE.Line>(null);
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.05;
+      groupRef.current.rotation.z = state.clock.elapsedTime * 0.06;
     }
   });
 
-  return (
-    <group ref={groupRef}>
-      {lineData.map((line) => {
-        const mid = line.start.clone().add(new THREE.Vector3(0, 0, 40));
-        const end = new THREE.Vector3(line.start.x + 60, line.start.y + 60, 70);
-        const pts: THREE.Vector3[] = [];
-        for (let t = 0; t <= 30; t++) {
-          const tt = t / 30;
-          const p1 = new THREE.Vector3().lerpVectors(line.start, mid, tt);
-          const p2 = new THREE.Vector3().lerpVectors(mid, end, tt);
-          pts.push(new THREE.Vector3().lerpVectors(p1, p2, tt));
-        }
-        const geom = new THREE.BufferGeometry().setFromPoints(pts);
-        return (
-          <primitive
-            key={line.id}
-            object={new THREE.Line(geom, new THREE.LineBasicMaterial({
-              color: C.gold,
-              transparent: true,
-              opacity: 0.15,
-              blending: THREE.AdditiveBlending,
-            }))}
-          />
-        );
-      })}
-    </group>
-  );
-}
+  const geom = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(points, 3));
+    return g;
+  }, [points]);
 
-// ── Chase light ring around campus ─────────────────────────────────────────
-function ChaseLight() {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame((state) => {
-    if (!groupRef.current) return;
-    const t = state.clock.elapsedTime;
-    groupRef.current.rotation.z = t * 0.08;
-  });
-
-  const segCount = 32;
-  const ringPoints: number[] = [];
-  for (let i = 0; i <= segCount; i++) {
-    const a = (i / segCount) * Math.PI * 2;
-    ringPoints.push(Math.cos(a) * 460, Math.sin(a) * 280, 46);
-  }
-
-  const ringGeom = new THREE.BufferGeometry();
-  ringGeom.setAttribute('position', new THREE.Float32BufferAttribute(ringPoints, 3));
-  const ringMat = new THREE.LineBasicMaterial({
+  const mat = useMemo(() => new THREE.LineBasicMaterial({
     color: C.goldLight,
     transparent: true,
-    opacity: 0.25,
+    opacity: 0.45,
     blending: THREE.AdditiveBlending,
-    depthTest: false,
     depthWrite: false,
-  });
+  }), []);
 
   return (
     <group ref={groupRef}>
-      <primitive object={new THREE.LineLoop(ringGeom, ringMat)} />
+      <primitive ref={ringRef} object={new THREE.LineLoop(geom, mat)} />
     </group>
   );
 }
 
-// ── Water / bay background ──────────────────────────────────────────────────
-function BayPlane() {
-  return (
-    <mesh position={[0, 0, -5]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[1400, 900]} />
-      <shaderMaterial
-        vertexShader={floorVert}
-        fragmentShader={floorFrag}
-        transparent
-        side={THREE.DoubleSide}
-      />
-    </mesh>
-  );
-}
-
-// ── Building labels (HTML overlay via CSS2D) ─────────────────────────────────
-// We render labels as a separate overlay — done in the parent component
-
-// ── Main scene ─────────────────────────────────────────────────────────────
-function Scene({
-  data,
-  onSelect,
-  selected,
-}: {
-  data: GeoFeatureCollection;
-  onSelect: (id: string | null) => void;
-  selected: string | null;
-}) {
+// ── Sky / sea backdrop ──────────────────────────────────────────────────
+function SkyBackdrop() {
   return (
     <>
-      <ambientLight color={C.ambient} intensity={1.2} />
-      <directionalLight position={[200, -400, 500]} color="#ffe4a0" intensity={2.2} />
-      <BayPlane />
-      <CampusMesh data={data} onSelect={onSelect} selected={selected} />
-      <ChaseLight />
-      <CameraController />
+      {/* Ground plane — deep ocean blue */}
+      <mesh position={[0, 0, -3]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[1600, 1100]} />
+        <meshBasicMaterial color={C.sea} />
+      </mesh>
+      {/* North sea plane (top of map) */}
+      <mesh position={[0, 260, -4]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[1400, 240]} />
+        <meshBasicMaterial color={C.bay} transparent opacity={0.85} />
+      </mesh>
+      {/* Subtle horizon glow line */}
+      <mesh position={[0, 320, 0]}>
+        <planeGeometry args={[1400, 1]} />
+        <meshBasicMaterial color={C.gold} transparent opacity={0.2} />
+      </mesh>
     </>
   );
 }
 
-// ── Public component ────────────────────────────────────────────────────────
+// ── Cable car / skytram line (HKUST-CWBC) ────────────────────────────────
+function Skytram() {
+  const lineRef = useRef<THREE.Line>(null);
+  const points = useMemo(() => {
+    // Approximate line from NW (Mount Davis) → campus
+    return [
+      new THREE.Vector3(-460, 220, 90),
+      new THREE.Vector3(-280, 180, 60),
+      new THREE.Vector3(-100, 140, 40),
+      new THREE.Vector3(80, 100, 20),
+      new THREE.Vector3(240, 60, 10),
+    ];
+  }, []);
+  const geom = useMemo(() => new THREE.BufferGeometry().setFromPoints(points), [points]);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    if (lineRef.current) {
+      const mat = lineRef.current.material as THREE.LineBasicMaterial;
+      mat.opacity = 0.35 + Math.sin(t * 2) * 0.1;
+    }
+  });
+
+  return (
+    <>
+      <primitive
+        object={(() => {
+          const ln = new THREE.Line(geom, new THREE.LineBasicMaterial({
+            color: C.goldLight,
+            transparent: true,
+            opacity: 0.4,
+          }));
+          lineRef.current = ln;
+          return ln;
+        })()}
+      />
+      {/* Cables — towers */}
+      {points.slice(0, -1).map((p, i) => (
+        <mesh key={i} position={[p.x, p.y, p.z]}>
+          <cylinderGeometry args={[1, 1, 30, 6]} />
+          <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.3} />
+        </mesh>
+      ))}
+      {/* Cable car 1 */}
+      <CableCar start={points[0]} end={points[Math.floor(points.length / 2)]} />
+    </>
+  );
+}
+
+function CableCar({ start, end }: { start: THREE.Vector3; end: THREE.Vector3 }) {
+  const ref = useRef<THREE.Mesh>(null);
+  useFrame((state) => {
+    if (ref.current) {
+      const t = (state.clock.elapsedTime * 0.05) % 1;
+      ref.current.position.lerpVectors(start, end, t);
+    }
+  });
+  return (
+    <mesh ref={ref}>
+      <boxGeometry args={[8, 5, 6]} />
+      <meshStandardMaterial color={C.gold} emissive={C.goldLight} emissiveIntensity={0.4} metalness={0.7} roughness={0.3} />
+    </mesh>
+  );
+}
+
+// ── Walkthrough CameraController ────────────────────────────────────────
+function CameraOrbit({ autoRotate = true }: { autoRotate?: boolean }) {
+  const { camera } = useThree();
+  useEffect(() => {
+    camera.position.set(-400, -700, 320);
+    camera.lookAt(0, 0, 30);
+  }, [camera]);
+  useFrame((state) => {
+    if (autoRotate) {
+      const t = state.clock.elapsedTime * 0.04;
+      const r = 800;
+      camera.position.x = Math.cos(t) * r * 0.5;
+      camera.position.y = Math.sin(t) * r * 0.6 - 200;
+      camera.lookAt(0, 0, 30);
+    }
+  });
+  return null;
+}
+
+// ── All buildings rendered together ─────────────────────────────────────
+function CampusBuildings({
+  data,
+  onHover,
+  selected,
+}: {
+  data: GeoFeatureCollection;
+  onHover: (id: string | null) => void;
+  selected: string | null;
+}) {
+  return (
+    <group>
+      {data.features.map((f) => (
+        <Building key={f.properties.id} feature={f} onHover={onHover} selected={selected} />
+      ))}
+    </group>
+  );
+}
+
+// ── Scene root ──────────────────────────────────────────────────────────
+function Scene({
+  data,
+  onHover,
+  selected,
+}: {
+  data: GeoFeatureCollection;
+  onHover: (id: string | null) => void;
+  selected: string | null;
+}) {
+  return (
+    <>
+      <color attach="background" args={['#02040a']} />
+
+      {/* Lighting — golden hour feel */}
+      <ambientLight color={C.ambientBlue} intensity={0.45} />
+      <directionalLight position={[300, -500, 600]} color={C.directional} intensity={2.4} castShadow={false} />
+      <directionalLight position={[-300, -200, 200]} color={C.goldLight} intensity={0.6} />
+      <hemisphereLight color={C.ambientBlue} groundColor="#02040a" intensity={0.5} />
+
+      <SkyBackdrop />
+      <Skytram />
+      <CampusBuildings data={data} onHover={onHover} selected={selected} />
+      <ChaseLightRing />
+
+      <CameraOrbit />
+    </>
+  );
+}
+
+// ── Public component ────────────────────────────────────────────────────
 export default function HKUSTThreeMap({
   data,
   onSelect,
@@ -401,11 +578,12 @@ export default function HKUSTThreeMap({
 }) {
   return (
     <Canvas
-      style={{ width: '100%', height: '100%', background: 'transparent' }}
-      camera={{ fov: 45, near: 1, far: 3000 }}
-      gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
+      style={{ width: '100%', height: '100%', background: 'transparent', cursor: 'grab' }}
+      camera={{ fov: 36, near: 1, far: 5000 }}
+      gl={{ alpha: true, antialias: true, powerPreference: 'high-performance', toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
+      dpr={[1, 2]}
     >
-      <Scene data={data} onSelect={onSelect} selected={selected} />
+      <Scene data={data} onHover={onSelect} selected={selected} />
     </Canvas>
   );
 }

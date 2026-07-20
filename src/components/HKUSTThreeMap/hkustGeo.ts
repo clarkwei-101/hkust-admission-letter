@@ -16,6 +16,8 @@ export interface GeoFeature {
     center?: Position;
     height: number;
     category: 'academic' | 'life' | 'landscape';
+    silhouette?: string;
+    story?: string;
     [key: string]: unknown;
   };
   geometry: {
