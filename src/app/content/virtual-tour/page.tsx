@@ -1,11 +1,25 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import { Building2, Compass, MapPin, X, ExternalLink } from 'lucide-react';
+import { useState, Suspense, useEffect } from 'react';
+import { Building2, Compass, MapPin, X, ExternalLink, Loader2 } from 'lucide-react';
 import Navigation from '@/components/Navigation/Navigation';
 import AIClubBanner from '@/components/AIClubBanner/AIClubBanner';
 import { useI18n } from '@/lib/i18n';
+import { hkustData } from '@/components/HKUSTThreeMap';
+import dynamic from 'next/dynamic';
+
+const HKUSTThreeMap = dynamic(
+  () => import('@/components/HKUSTThreeMap/HKUSTThreeMap'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="w-8 h-8 text-[#d4a84b] animate-spin" />
+      </div>
+    ),
+  }
+);
 
 interface Building {
   id: string;
@@ -117,6 +131,27 @@ const CATEGORY_COLORS: Record<Building['category'], string> = {
 export default function VirtualTourPage() {
   const { t, locale } = useI18n();
   const [selected, setSelected] = useState<Building | null>(null);
+  const [mapSelected, setMapSelected] = useState<string | null>(null);
+
+  // Sync 3D map selection with building modal
+  useEffect(() => {
+    if (mapSelected) {
+      const building = BUILDINGS.find(b => {
+        const idMap: Record<string, string> = {
+          lib: 'library',
+          ac: 'academic_building',
+          ssc: 'student_centre',
+          sro: 's_h_ho_college',
+          podium: 'piazza',
+          sai: 'waterfront',
+          ias: 'ias',
+          shaw: 'shaw_auditorium',
+        };
+        return idMap[b.id] === mapSelected || b.id === mapSelected;
+      });
+      if (building) setSelected(building);
+    }
+  }, [mapSelected]);
 
   const isZh = locale === 'zh';
 
@@ -133,7 +168,7 @@ export default function VirtualTourPage() {
           >
             <div className="inline-block px-4 py-1 mb-4 rounded-full bg-[#996600]/15 border border-[#996600]/30 text-[#d4a84b] text-xs uppercase tracking-[0.3em]">
               <MapPin className="w-3 h-3 inline-block mr-1 -mt-0.5" />
-              Google Maps · Campus
+              3D Interactive Map · Campus
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 tracking-tight">
               <span className="text-gradient-gold">{t.virtualTour.title}</span>
@@ -146,7 +181,7 @@ export default function VirtualTourPage() {
             </p>
           </motion.div>
 
-          {/* Google Maps Embed */}
+          {/* 3D HKUST Campus Map */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -157,7 +192,7 @@ export default function VirtualTourPage() {
               <div className="flex items-center gap-2 text-white/80 text-sm">
                 <Compass className="w-4 h-4 text-[#996600]" />
                 <span>{t.virtualTour.liveMapTitle}</span>
-                <span className="text-white/40 text-xs">· Hong Kong University of Science and Technology</span>
+                <span className="text-white/40 text-xs">· Hong Kong University of Science and Technology · 3D Interactive Map</span>
               </div>
               <a
                 href="https://www.google.com/maps/place/Hong+Kong+University+of+Science+and+Technology+(HKUST)/@22.2525,114.2145,15z/"
@@ -170,17 +205,13 @@ export default function VirtualTourPage() {
               </a>
             </div>
             <div className="relative w-full h-[380px] md:h-[460px]">
-              <iframe
-                title="HKUST Campus Map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3710.5!2d114.2145!3d22.2525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34015a8e2d8d0d0d%3A0x!2sHong%20Kong%20University%20of%20Science%20and%20Technology!5e0!3m2!1sen!2shk!4v1753000000000"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
+              <HKUSTThreeMap
+                data={hkustData}
+                onSelect={setMapSelected}
+                selected={mapSelected}
               />
-              <div className="pointer-events-none absolute bottom-3 right-3 px-3 py-1.5 rounded-md bg-black/70 text-white/80 text-xs backdrop-blur">
+              <div className="pointer-events-none absolute bottom-3 right-3 px-3 py-1.5 rounded-md bg-black/70 text-white/80 text-xs backdrop-blur flex items-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-[#d4a84b]" />
                 {t.virtualTour.liveMapCaption}
               </div>
             </div>
