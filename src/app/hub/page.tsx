@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation/Navigation';
@@ -13,13 +14,19 @@ import { Sparkles, Mail } from 'lucide-react';
 export default function HubPage() {
   const { t } = useI18n();
   const { name, hasName } = usePersonalisation();
-  const hour = new Date().getHours();
-  const greeting =
-    hour < 5 ? t.hub.greeting.night :
-    hour < 12 ? t.hub.greeting.morning :
-    hour < 18 ? t.hub.greeting.afternoon :
-    hour < 22 ? t.hub.greeting.evening :
-    t.hub.greeting.night;
+  // Defer time-of-day greeting to client-side to avoid SSR/hydration mismatch.
+  // Default to morning so SSR and initial client render agree; effect corrects it.
+  const [greeting, setGreeting] = useState(t.hub.greeting.morning);
+  useEffect(() => {
+    const hour = new Date().getHours();
+    setGreeting(
+      hour < 5 ? t.hub.greeting.night :
+      hour < 12 ? t.hub.greeting.morning :
+      hour < 18 ? t.hub.greeting.afternoon :
+      hour < 22 ? t.hub.greeting.evening :
+      t.hub.greeting.night
+    );
+  }, [t.hub.greeting]);
 
   return (
     <main className="min-h-screen relative overflow-hidden">

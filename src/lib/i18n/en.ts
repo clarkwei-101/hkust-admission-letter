@@ -1,6 +1,11 @@
 import { Locale } from './I18nProvider';
 
-const ADMISSION_YEAR = new Date().getFullYear();
+// ADMISSION_YEAR is fixed for the whole intake window — don't read it from
+// `new Date()` at module load or the server- and client-rendered HTML will
+// disagree (React hydration mismatch) on the rare boundary condition where
+// the SSR snapshot is built seconds before midnight and the client mounts
+// after midnight UTC.
+const ADMISSION_YEAR = 2026;
 
 const en = {
   meta: {
@@ -80,7 +85,7 @@ const en = {
     subtitle: 'A note from the President',
     presidentTitle: "President's Welcome",
     presidentBody: [
-      'Dear admit, welcome to the Hong Kong University of Science and Technology — a community driven by curiosity, rigour, and a deep belief that science and technology can serve humanity.',
+      'Welcome to the Hong Kong University of Science and Technology — a community driven by curiosity, rigour, and a deep belief that science and technology can serve humanity.',
       'At HKUST, you will work alongside world-class scholars, design solutions to problems that do not yet have names, and form friendships that last a lifetime.',
       'Whatever school you join — Engineering, Science, Business, or Humanities & Social Science — you belong here.',
       'We cannot wait to see what you will build, discover, and contribute.',

@@ -13,6 +13,9 @@ interface EnvelopeProps {
   soundEnabled?: boolean;
 }
 
+// `BLESSINGS` is selected deterministically inside the component via a stable
+// index derived from the current day-of-year so server- and client-rendered
+// HTML match (no hydration mismatch from `Math.random()`).
 const BLESSINGS = [
   "Welcome to HKUST — your future starts here.",
   "Every great journey begins with a single step. Today is yours.",
@@ -24,7 +27,16 @@ const BLESSINGS = [
   "The best version of your story begins this September.",
 ];
 
-const ADMISSION_YEAR = new Date().getFullYear();
+function pickBlessing(): string {
+  // Day-of-year is identical on server and client for the same calendar day,
+  // so this is safe to compute during initial render. `useEffect` would
+  // trigger a visible flash on the letter text — we want the same blessing
+  // both at SSR and at hydration time.
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86_400_000);
+  return BLESSINGS[dayOfYear % BLESSINGS.length];
+}
 
 export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }: EnvelopeProps) {
   const { t } = useI18n();
@@ -32,7 +44,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
   const [isOpening, setIsOpening] = useState(false);
   const [isLetterExpanded, setIsLetterExpanded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [currentBlessing] = useState(() => BLESSINGS[Math.floor(Math.random() * BLESSINGS.length)]);
+  const [currentBlessing] = useState(() => pickBlessing());
   const letterAudioRef = useRef<HTMLAudioElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const envelopeRef = useRef<HTMLDivElement>(null);

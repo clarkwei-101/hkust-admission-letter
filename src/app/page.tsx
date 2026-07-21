@@ -18,8 +18,6 @@ const ParticleBackground = dynamic(
 
 type Stage = 'intro' | 'name' | 'envelope';
 
-const ADMISSION_YEAR = new Date().getFullYear();
-
 export default function HomePage() {
   const router = useRouter();
   const { t } = useI18n();

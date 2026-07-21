@@ -83,7 +83,9 @@ export default function WelcomePage() {
                 <div className="text-[#C0C0C0] leading-relaxed space-y-4">
                   {t.welcome.presidentBody.map((paragraph: string, i: number) => (
                     <p key={i} className={i === 0 ? 'text-lg italic' : ''}>
-                      {paragraph}
+                      {i === 0
+                        ? `${isZh ? `亲爱的${safeName}，` : `Dear ${safeName}, `}${paragraph}`
+                        : paragraph}
                     </p>
                   ))}
                   <p className="text-right mt-6 text-[#996600] font-medium italic">

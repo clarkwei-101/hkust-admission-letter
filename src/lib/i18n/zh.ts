@@ -1,6 +1,11 @@
 import { EnDict } from './en';
 
-const ADMISSION_YEAR = new Date().getFullYear();
+// ADMISSION_YEAR is fixed for the whole intake window — don't read it from
+// `new Date()` at module load or the server- and client-rendered HTML will
+// disagree (React hydration mismatch) on the rare boundary condition where
+// the SSR snapshot is built seconds before midnight and the client mounts
+// after midnight UTC.
+const ADMISSION_YEAR = 2026;
 
 // Chinese mirror of the English dictionary.
 // Use Simplified Chinese-friendly Traditional phrasing; keep proper nouns faithful.
@@ -83,7 +88,7 @@ const zh = {
     subtitle: '校长寄语',
     presidentTitle: '校长欢迎辞',
     presidentBody: [
-      '亲爱的录取同学，欢迎加入香港科技大学——一个由好奇心、严谨与对科技的信念所推动的学术共同体。',
+      '欢迎加入香港科技大学——一个由好奇心、严谨与对科技的信念所推动的学术共同体。',
       '在这里，你将与世界顶尖的学者并肩工作，设计尚不存在问题的解决方案，并结识将伴你一生的朋友。',
       '无论你来自工程、理学院、商学院，还是人文社科学院——这里都有属于你的位置。',
       '我们迫不及待地想看到你将创造、发现与贡献的一切。',
