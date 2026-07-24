@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { motion } from 'framer-motion';
 import { Mail, Sparkles, GraduationCap, MapPin, Calendar, Users, PartyPopper } from 'lucide-react';
 import Fireworks from '@/components/Fireworks/Fireworks';
+import Disclaimer from '@/components/Disclaimer/Disclaimer';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 
@@ -413,6 +414,11 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
             </p>
           </div>
 
+          {/* Long-form disclaimer — required for legal clarity. */}
+          <div className="mt-10">
+            <Disclaimer variant="banner" />
+          </div>
+
           <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#996600] to-transparent mt-12" />
         </motion.div>
       </motion.div>
@@ -423,6 +429,10 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
     <div ref={containerRef} className="relative w-full max-w-2xl mx-auto px-2">
       {/* Open SFX — user-supplied MP3 (mixkit ending-show applause) */}
       <audio ref={openSfxRef} src="/admission-applause.mp3" preload="auto" />
+
+      {/* Disclaimer pill above the envelope — required for legal clarity since
+          this is a student-made project, not an official HKUST artefact. */}
+      {!isOpening && <Disclaimer variant="envelope" className="mb-4" />}
 
       {/* Decorative particles around envelope */}
       {!isOpening &&
@@ -487,6 +497,9 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
                 {t.home.envelope.seal}
                 <span className="w-12 h-px bg-white/20" />
               </div>
+              <p className="text-[#996600]/60 text-[9px] tracking-[0.25em] uppercase pt-1">
+                {t.home.disclaimer.short}
+              </p>
             </div>
 
             <div className="text-center mt-10 px-8">

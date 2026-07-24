@@ -7,6 +7,7 @@ import AIClubBanner from '@/components/AIClubBanner/AIClubBanner';
 import ClubCard from '@/components/ClubCard/ClubCard';
 import { useI18n } from '@/lib/i18n';
 import { Users, Search, X } from 'lucide-react';
+import LiveFeed from '@/components/LiveFeed/LiveFeed';
 
 type ClubCategoryKey =
   | 'core'
@@ -1433,6 +1434,16 @@ export default function ClubsPage() {
                 {isZh ? '访问 HKUSTSU 官网' : 'Visit HKUSTSU Official'}
               </a>
             </div>
+          </motion.div>
+
+          {/* Live clubs feed — scraped from sao.hkust.edu.hk */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="mt-10 max-w-2xl mx-auto"
+          >
+            <LiveFeed category="clubs" limit={4} />
           </motion.div>
         </div>
       </div>

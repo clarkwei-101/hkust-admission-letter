@@ -33,6 +33,7 @@ export type Dictionary = {
   virtualTour: Record<string, any>;
   campusLive: Record<string, any>;
   envelope: Record<string, any>;
+  news: Record<string, any>;
   lang: { label: string; en: string; zh: string };
 };
 

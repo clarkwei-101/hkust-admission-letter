@@ -48,6 +48,12 @@ const en = {
     transitionMessage: 'Opening your journey',
     transitionHint: 'One moment...',
     personalizedBadge: 'Personalised for',
+    disclaimer: {
+      long: 'This is an unofficial digital experience produced by the AI × Sci-Fi Club, a student-led initiative of The Hong Kong University of Science and Technology. It is not endorsed by, affiliated with, or representative of the official university. All academic information, dates, and offers are subject to confirmation by the official Admissions Office. For the authoritative source, please refer to hkust.edu.hk.',
+      short: 'Fan-made by AI × Sci-Fi Club · See hkust.edu.hk for official info.',
+      credit: 'Produced by AI × Sci-Fi Club · A student-led initiative',
+      reference: 'For authoritative information, visit hkust.edu.hk',
+    },
   },
   hub: {
     title: 'HKUST Admission Guide',
@@ -61,6 +67,12 @@ const en = {
     ctaTour: 'Open Virtual Campus',
     footer: 'Hong Kong University of Science and Technology',
     footerCredit: 'AI X SCI-FI CLUB · 2026',
+    disclaimer: {
+      long: 'This is an unofficial digital experience produced by the AI × Sci-Fi Club, a student-led initiative of The Hong Kong University of Science and Technology. It is not endorsed by, affiliated with, or representative of the official university. All academic information, dates, and offers are subject to confirmation by the official Admissions Office. For the authoritative source, please refer to hkust.edu.hk.',
+      short: 'Fan-made by AI × Sci-Fi Club · See hkust.edu.hk for official info.',
+      credit: 'Produced by AI × Sci-Fi Club · A student-led initiative',
+      reference: 'For authoritative information, visit hkust.edu.hk',
+    },
     greeting: {
       morning: 'Good morning',
       afternoon: 'Good afternoon',
@@ -416,6 +428,27 @@ const en = {
     soundOff: 'Sound off',
     reopen: 'Re-open the letter',
     celebrate: 'Celebrate with us',
+  },
+  news: {
+    title: 'Latest from HKUST',
+    subtitle: 'Live updates scraped from HKUST news, events, calendars and announcements',
+    intro: 'A live feed of student-relevant content updated automatically every 6 hours from the official HKUST websites.',
+    loading: 'Loading latest updates...',
+    empty: 'No updates yet. The crawler will run shortly.',
+    error: 'Could not load live updates. Showing the last known snapshot.',
+    lastUpdated: 'Last updated',
+    filters: {
+      all: 'All',
+      news: 'News',
+      events: 'Events',
+      academic: 'Academic',
+      clubs: 'Clubs',
+      admissions: 'Admissions',
+    },
+    sourceLabel: 'Source',
+    viewOriginal: 'View on hkust.edu.hk',
+    itemCount: 'items',
+    externalLinkWarning: 'Opens the official HKUST website in a new tab',
   },
   lang: {
     label: 'Language',

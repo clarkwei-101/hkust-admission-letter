@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation/Navigation';
 import AIClubBanner from '@/components/AIClubBanner/AIClubBanner';
 import CountdownTimer from '@/components/CountdownTimer/CountdownTimer';
-import { Mail, Calendar, Zap, GraduationCap } from 'lucide-react';
+import { Mail, Calendar, Zap, GraduationCap, Newspaper } from 'lucide-react';
+import LiveFeed from '@/components/LiveFeed/LiveFeed';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 
@@ -155,6 +156,16 @@ export default function WelcomePage() {
               Your Journey Begins Here
             </p>
             <p className="text-[#C0C0C0] mt-2">{t.welcome.journeyBeginsZh}</p>
+          </motion.div>
+
+          {/* Live HKUST news — scraped every 6 hours from hkust.edu.hk */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+            className="mt-8"
+          >
+            <LiveFeed category="news" limit={4} />
           </motion.div>
         </div>
       </div>

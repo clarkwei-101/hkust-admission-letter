@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Navigation from '@/components/Navigation/Navigation';
 import ContentCard from '@/components/ContentCard/ContentCard';
 import AIClubBanner from '@/components/AIClubBanner/AIClubBanner';
+import Disclaimer from '@/components/Disclaimer/Disclaimer';
 import { NAV_ITEMS } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
@@ -136,6 +137,34 @@ export default function HubPage() {
                 <span>Live Campus</span>
               </Link>
             </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+              whileHover={{ y: -2 }}
+            >
+              <Link
+                href="/content/news"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-white/80 hover:text-white hover:border-[#10B981]/40 transition-colors text-sm font-medium"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4 text-[#10B981]"
+                  aria-hidden="true"
+                >
+                  <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
+                  <path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6z" />
+                </svg>
+                <span>Live Feed</span>
+              </Link>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -188,8 +217,13 @@ export default function HubPage() {
             className="mt-20 md:mt-24 text-center"
           >
             <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#996600]/50 to-transparent mx-auto mb-6" />
-            <p className="text-[#C0C0C0]/60 text-sm">{t.hub.footer}</p>
-            <p className="text-[#996600]/60 text-xs mt-2">{t.hub.footerCredit}</p>
+            <p className="text-[#C0C0C0]/80 text-sm font-medium">{t.hub.footer}</p>
+            <p className="text-[#996600]/70 text-xs mt-2 tracking-wider">{t.hub.footerCredit}</p>
+
+            {/* Required regulatory disclaimer — student-made project, defer to hkust.edu.hk */}
+            <div className="mt-8 max-w-3xl mx-auto text-left">
+              <Disclaimer variant="banner" />
+            </div>
           </motion.footer>
         </div>
       </div>

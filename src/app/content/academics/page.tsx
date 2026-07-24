@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation/Navigation';
 import AIClubBanner from '@/components/AIClubBanner/AIClubBanner';
+import LiveFeed from '@/components/LiveFeed/LiveFeed';
 import { useI18n } from '@/lib/i18n';
 import { GraduationCap } from 'lucide-react';
 
@@ -177,6 +178,16 @@ export default function AcademicsPage() {
                 <div className="text-[#C0C0C0] text-sm">{(t.academics.stats as Record<string, string>)[stat.labelKey]}</div>
               </motion.div>
             ))}
+          </motion.div>
+
+          {/* Live academic announcements — scraped every 6 hours from each faculty site */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.1 }}
+            className="mt-12"
+          >
+            <LiveFeed category="academic" limit={6} />
           </motion.div>
         </div>
       </div>

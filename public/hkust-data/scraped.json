@@ -1,0 +1,596 @@
+{
+  "scrapedAt": "2026-07-24T11:46:37.631123+00:00",
+  "totalItems": 23,
+  "byCategory": {
+    "news": [
+      {
+        "title": "HKUST-Led International Research Team Wins Prestigious Creativity Prize at the Prince Sultan Bin Abdulaziz International Prize for Water (PSIPW)",
+        "summary": "Prof. Mohamed Salah GHIDAOUI, Chinese Estates Professor of Engineering and Chair Professor of the Department of Civil and Environmental Engineering at The Hong Kong University of Science and Technology (HKUST), his international collaborators, and students have been awarded the Creativity Prize at the 12th Award of the PSIPW for their pioneering research in time reversal of waves and its successful translation into a novel diagnostic technology for pressurized water pipe networks. This “Creativity Prize,” valued at US$266,000, is widely recognized as one of the most prestigious honors in water engineering and science. The United Nations (UN) headquarters in Vienna served as the venue for the public announcement of the PSIPW awards in June 2026, during the water session of the 69th Committee on the Peaceful Uses of Outer Space (COPUOS). This same venue will also host the award presentation ceremony later this year.",
+        "url": "https://hkust.edu.hk/news/hkust-led-international-research-team-wins-prestigious-creativity-prize-prince-sultan-bin",
+        "date": "2026-07-24",
+        "dateDetected": "2026-07-24",
+        "category": "news",
+        "source": "https://hkust.edu.hk/news/listing",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.939817+00:00"
+      },
+      {
+        "title": "HKUST Develops New Biocompatible Chemical Reaction to Advance Next-Generation Anticancer Prodrugs",
+        "summary": "Anticancer prodrugs have attracted significant attention from the medical and scientific communities in recent years due to their potential to improve treatment precision while reducing adverse side effects. These drugs are specially engineered to remain inactive until they are activated at specific sites or under particular physiological conditions within the body, at which point they release their therapeutic effect. This targeted approach helps minimize damage to healthy tissues that often occurs when conventional chemotherapy agents attack cancer cells, addressing the longstanding challenge of collateral toxicity in cancer treatment.However, achieving precise drug activation within the body's highly complex biological environment remains a considerable challenge. Existing chemical strategies and activation technologies continue to face a number of technical limitations and obstacles, highlighting the need for further innovation in this field.",
+        "url": "https://hkust.edu.hk/news/hkust-develops-new-biocompatible-chemical-reaction-advance-next-generation-anticancer-prodrugs",
+        "date": "2026-07-24",
+        "dateDetected": "2026-07-24",
+        "category": "news",
+        "source": "https://hkust.edu.hk/news/listing",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.940599+00:00"
+      },
+      {
+        "title": "HKUST Scholars Honored as RGC Senior Research Fellow and Research Fellows for Outstanding Research Achievements",
+        "summary": "The Hong Kong University of Science and Technology (HKUST) has achieved notable achievements in the Research Grants Council's (RGC) Senior Research Fellow Scheme (SRFS) and Research Fellow Scheme (RFS) for the 2026/27 exercise, with three distinguished scholars receiving the fellowship awards. The honors recognize their pioneering research in frontier fields, including electrosynthesis, quantum materials, and generative artificial intelligence (GenAI), as well as their exceptional contributions to driving impactful scientific breakthroughs and advancing the frontiers of knowledge.",
+        "url": "https://hkust.edu.hk/news/hkust-scholars-honored-rgc-senior-research-fellow-and-research-fellows-outstanding-research",
+        "date": "2026-07-21",
+        "dateDetected": "2026-07-21",
+        "category": "news",
+        "source": "https://hkust.edu.hk/news/listing",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.941115+00:00"
+      },
+      {
+        "title": "HKUST Develops Ultra-Robust Acoustic Chip Technology to Advance 6G and Satellite Communications",
+        "summary": "Researchers from The Hong Kong University of Science and Technology (HKUST) have developed a novel chip architecture that enables the miniature acoustic devices inside smartphones to withstand over 12 times higher power loads while maintaining cooler and more stable operation. Tested on transducers vibrating more than two billion times per second, the new platform – named \"Layered Acoustic Wave\" (LAW) – reduced the operating temperature rise by 70% and set a record threshold power density of 36.4 W/mm². The breakthrough lifts a decades-old restriction that confined acoustic chips to small-signal processing, paving the way for a new generation of applications from direct-to-cell satellite communications and 6G networks to compact power conversion.",
+        "url": "https://hkust.edu.hk/news/hkust-develops-ultra-robust-acoustic-chip-technology-advance-6g-and-satellite-communications",
+        "date": "2026-07-21",
+        "dateDetected": "2026-07-21",
+        "category": "news",
+        "source": "https://hkust.edu.hk/news/listing",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.941539+00:00"
+      },
+      {
+        "title": "HKUST Improves Solar Cell Performance and Durability through Molecular Interface Engineering",
+        "summary": "Solar cells' efficiency and lifespan are often determined by what happens at interfaces — the microscopic boundaries where different materials meet. Researchers from The Hong Kong University of Science and Technology (HKUST) have contributed to two recently published studies that show molecular interface engineering can unlock major gains in the efficiency and durability of next-generation perovskite tandem solar cells.The two studies, published in academic journals Joule (impact factor: 37.1) and Nature Communications, focus on different tandem architectures but convey one common message: carefully designed molecular layers can do far more than connect materials. They can guide how perovskite films crystallize, suppress energy-wasting defects, promote charge transport and protect solar cells against degradation.",
+        "url": "https://hkust.edu.hk/news/hkust-improves-solar-cell-performance-and-durability-through-molecular-interface-engineering",
+        "date": "2026-07-17",
+        "dateDetected": "2026-07-17",
+        "category": "news",
+        "source": "https://hkust.edu.hk/news/listing",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.941981+00:00"
+      },
+      {
+        "title": "HKUST Hosts the 4th \"Four Seas Cup\" Hong Kong International University Student WeiQi Competition (Chinese Version Only)",
+        "summary": "由香港大灣區圍棋促進會及香港科技大學（科大）聯合主辦的第四屆「四洲盃」香港國際大學生圍棋公開賽，於7月14日至18日在科大校園隆重舉行。賽事開幕典禮於今日（7月15日）在科大逸夫演藝中心盛大舉行，並非常榮幸邀請到香港特別行政區政府教育局局長蔡若蓮博士等重量級嘉賓蒞臨主禮。出席開幕儀式的嘉賓亦包括：香港大灣區圍棋促進會會長徐瑩女士、科大副校長（大學拓展）吳宏偉教授、四洲集團創辦人兼主席戴德豐博士、深圳市文化廣電旅遊體育局副局長何建輝先生、中央政府駐港聯絡辦宣傳文體部副部長林枬先生、外交部駐港特派員公署發言人兼新聞及公共關係部主任黃景睿先生、新華社亞太總分社社長孫承斌先生、中央廣播電視總台香港記者站站長王喜凱先生、中央廣播電視總台亞太總站副站長李風先生、先施集團主席、全國政協委員林曉暉先生、香港新聞工作者聯會會長張國良先生及科大跨學科學院院長屈華民教授等。 今年適逢科大創校35周年，本屆賽事已列為校慶的亮點項目之一，其規模及嘉賓陣容均為歷屆之冠。本屆參賽隊伍由上屆的19支大幅增加至29支，匯聚全球25個國家及地區近90名頂尖大學生棋手同台對弈。賽事今年更迎來突破性的國際化升級，獲冠名贊助人戴德豐博士的鼎力支持與持續贊助，並首次迎來美國麻省理工學院、芝加哥大學，以及歐洲與拉丁美洲地區的棋手參賽；東南亞賽區則新增東盟聯隊、印尼隊及菲律賓隊；內地參賽陣容亦進一步擴大，四川大學、廈門大學、浙江大學、貴州大學及廣州華商學院五所高校首次派員參賽，充分實踐「棋聚四洲、手談天下」的主題目標。",
+        "url": "https://hkust.edu.hk/news/hkust-hosts-4th-four-seas-cup-hong-kong-international-university-student-weiqi-competition",
+        "date": "2026-07-15",
+        "dateDetected": "2026-07-15",
+        "category": "news",
+        "source": "https://hkust.edu.hk/news/listing",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.942433+00:00"
+      },
+      {
+        "title": "HKUST Launches Mandatory AI Common Core Program to Nurture Future Leaders  Comprehensive Scholarships to Attract Top Talent",
+        "summary": "In response to evolving talent needs, The Hong Kong University of Science and Technology (HKUST) continues to innovate its curriculum and strengthen student support. Following the launch of its Bachelor of Science (BSc) in Biomedical and Health Sciences program last year, which has emerged as HKUST’s most competitive program in this year’s admissions exercise, the University will introduce a mandatory Artificial Intelligence (AI) Common Core Program in the coming academic year to equip students with essential knowledge and competencies in human-AI collaboration and AI applications. In addition, HKUST offers scholarships and student-support initiatives comparable to those of leading universities in the city, providing students with rich learning experience opportunities through scholarships, overseas learning support, and a wide range of personal and professional development programs.AI Common Core Program for Future Innovators",
+        "url": "https://hkust.edu.hk/news/hkust-launches-mandatory-ai-common-core-program-nurture-future-leaders-comprehensive",
+        "date": "2026-07-14",
+        "dateDetected": "2026-07-14",
+        "category": "news",
+        "source": "https://hkust.edu.hk/news/listing",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.942842+00:00"
+      },
+      {
+        "title": "HKUST and Indonesia's Ministry of Higher Education, Science, and Technology Deepen Partnership with Garuda Scholarship Framework to Nurture Top-Tier Talent",
+        "summary": "The Hong Kong University of Science and Technology (HKUST) and the Ministry of Higher Education, Science, and Technology of the Republic of Indonesia have signed a new Memorandum of Understanding (MoU) to reinforce the implementation of an Indonesian government-funded scholarship framework aimed at cultivating top-tier future talent. A cornerstone of this collaboration is the integration of Indonesia’s newly launched Garuda Scholarship to support more outstanding students pursuing undergraduate studies at HKUST. Building on the cooperation agreement established in May 2024, the new MoU solidifies the formal scholarship framework while paving the way for both parties to explore further synergistic opportunities in student internships, academic exchanges, and joint research initiatives to drive innovation in higher education.",
+        "url": "https://hkust.edu.hk/news/hkust-and-indonesias-ministry-higher-education-science-and-technology-deepen-partnership",
+        "date": "2026-07-14",
+        "dateDetected": "2026-07-14",
+        "category": "news",
+        "source": "https://hkust.edu.hk/news/listing",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.943293+00:00"
+      }
+    ],
+    "events": [],
+    "academic": [
+      {
+        "title": "Saturday, August 8, 2026",
+        "summary": "Builds Bridges Between Data, Industry, and Human Spirit",
+        "url": "https://seng.hkust.edu.hk/",
+        "date": null,
+        "dateDetected": null,
+        "category": "academic",
+        "source": "https://seng.hkust.edu.hk/",
+        "school": {
+          "name": "School of Engineering",
+          "nameZh": "工程学院",
+          "code": "SENG"
+        },
+        "scrapedAt": "2026-07-24T11:46:30.550510+00:00"
+      },
+      {
+        "title": "News",
+        "summary": null,
+        "url": "https://seng.hkust.edu.hk/news/20260721/hkust-engineering-develops-ultra-robust-acoustic-chip-technology-advance-6g-and-satellite-communications",
+        "date": null,
+        "dateDetected": null,
+        "category": "academic",
+        "source": "https://seng.hkust.edu.hk/news",
+        "school": {
+          "name": "School of Engineering",
+          "nameZh": "工程学院",
+          "code": "SENG"
+        },
+        "scrapedAt": "2026-07-24T11:46:32.592006+00:00"
+      },
+      {
+        "title": "HKUST ranked no. 1 in Citations in Social Science among Asian Universities",
+        "summary": "",
+        "url": "https://shss.hkust.edu.hk/news/coding-communication-secondary-students-build-english-language-learning-apps-summer",
+        "date": null,
+        "dateDetected": null,
+        "category": "academic",
+        "source": "https://shss.hkust.edu.hk/",
+        "school": {
+          "name": "School of Humanities & Social Science",
+          "nameZh": "人文社会科学学院",
+          "code": "SHSS"
+        },
+        "scrapedAt": "2026-07-24T11:46:32.670741+00:00"
+      },
+      {
+        "title": "SHSS News and Events Side Menu",
+        "summary": null,
+        "url": "https://shss.hkust.edu.hk/news",
+        "date": null,
+        "dateDetected": null,
+        "category": "academic",
+        "source": "https://shss.hkust.edu.hk/news",
+        "school": {
+          "name": "School of Humanities & Social Science",
+          "nameZh": "人文社会科学学院",
+          "code": "SHSS"
+        },
+        "scrapedAt": "2026-07-24T11:46:33.239366+00:00"
+      }
+    ],
+    "clubs": [
+      {
+        "title": "Page Not Found",
+        "summary": "We’re sorry, the page you requested could not be found.",
+        "url": "https://hkust.edu.hk/",
+        "date": null,
+        "dateDetected": null,
+        "category": "clubs",
+        "source": "https://hkust.edu.hk/student-life/clubs",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:26.932740+00:00"
+      }
+    ],
+    "admissions": [],
+    "uncategorised": [
+      {
+        "title": "About",
+        "summary": "We provide a breeding ground for tomorrow’s leaders to flourish.",
+        "url": "https://hkust.edu.hk/",
+        "date": null,
+        "dateDetected": null,
+        "category": "uncategorised",
+        "source": "https://hkust.edu.hk/about",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:27.992943+00:00"
+      },
+      {
+        "title": "News & Stories",
+        "summary": "Our latest endeavors are creating positive change in a dynamic global environment.",
+        "url": "https://35a.hkust.edu.hk/",
+        "date": "2026-06-16",
+        "dateDetected": "2026-06-16",
+        "category": "uncategorised",
+        "source": "https://hkust.edu.hk/",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:28.015137+00:00"
+      },
+      {
+        "title": "HKUST and HKUST(GZ) Present SURREALITY MR × AI Digital Art Cross-City Exhibition",
+        "summary": null,
+        "url": "https://hkust.edu.hk/news/hkust-and-hkustgz-present-surreality-mr-ai-digital-art-cross-city-exhibition",
+        "date": "2026-06-16",
+        "dateDetected": "2026-06-16",
+        "category": "uncategorised",
+        "source": "https://hkust.edu.hk/",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:28.015575+00:00"
+      },
+      {
+        "title": "HKUST Develops World's First AI Slide-Free Pathology Imaging System",
+        "summary": null,
+        "url": "https://hkust.edu.hk/news/hkust-develops-worlds-first-ai-slide-free-pathology-imaging-system",
+        "date": "2026-06-15",
+        "dateDetected": "2026-06-15",
+        "category": "uncategorised",
+        "source": "https://hkust.edu.hk/",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:28.015926+00:00"
+      },
+      {
+        "title": "HKUST Hosts Opening Ceremony for 'Jockey Club i-Village'",
+        "summary": null,
+        "url": "https://hkust.edu.hk/news/hkust-hosts-opening-ceremony-jockey-club-i-village",
+        "date": "2026-06-11",
+        "dateDetected": "2026-06-11",
+        "category": "uncategorised",
+        "source": "https://hkust.edu.hk/",
+        "school": null,
+        "scrapedAt": "2026-07-24T11:46:28.016269+00:00"
+      },
+      {
+        "title": "Home",
+        "summary": "Explore different library zones to match your study style—solo, silent, or group work.",
+        "url": "https://library.hkust.edu.hk/facilities-space/space/places-study",
+        "date": null,
+        "dateDetected": null,
+        "category": "uncategorised",
+        "source": "https://library.hkust.edu.hk/",
+        "school": {
+          "name": "Library",
+          "nameZh": "图书馆",
+          "code": "LIB"
+        },
+        "scrapedAt": "2026-07-24T11:46:33.955843+00:00"
+      },
+      {
+        "title": "2016-Mar-22",
+        "summary": null,
+        "url": "http://career.hkust.edu.hk/web/news.php",
+        "date": null,
+        "dateDetected": null,
+        "category": "uncategorised",
+        "source": "https://career.hkust.edu.hk/web/home.php",
+        "school": {
+          "name": "Career Centre",
+          "nameZh": "职业发展中心",
+          "code": "CAREER"
+        },
+        "scrapedAt": "2026-07-24T11:46:35.021810+00:00"
+      },
+      {
+        "title": "2026-Jun-01",
+        "summary": null,
+        "url": "https://dst.hkust.edu.hk/student-life/roc",
+        "date": null,
+        "dateDetected": null,
+        "category": "uncategorised",
+        "source": "https://career.hkust.edu.hk/web/home.php",
+        "school": {
+          "name": "Career Centre",
+          "nameZh": "职业发展中心",
+          "code": "CAREER"
+        },
+        "scrapedAt": "2026-07-24T11:46:35.022523+00:00"
+      },
+      {
+        "title": "2022-Apr-13",
+        "summary": null,
+        "url": "https://career.hkust.edu.hk/web/page.php?sid=85",
+        "date": null,
+        "dateDetected": null,
+        "category": "uncategorised",
+        "source": "https://career.hkust.edu.hk/web/home.php",
+        "school": {
+          "name": "Career Centre",
+          "nameZh": "职业发展中心",
+          "code": "CAREER"
+        },
+        "scrapedAt": "2026-07-24T11:46:35.022982+00:00"
+      },
+      {
+        "title": "2025-Sep-04",
+        "summary": null,
+        "url": "http://career.hkust.edu.hk/web/job.php",
+        "date": null,
+        "dateDetected": null,
+        "category": "uncategorised",
+        "source": "https://career.hkust.edu.hk/web/home.php",
+        "school": {
+          "name": "Career Centre",
+          "nameZh": "职业发展中心",
+          "code": "CAREER"
+        },
+        "scrapedAt": "2026-07-24T11:46:35.023369+00:00"
+      }
+    ]
+  },
+  "items": [
+    {
+      "title": "Page Not Found",
+      "summary": "We’re sorry, the page you requested could not be found.",
+      "url": "https://hkust.edu.hk/",
+      "date": null,
+      "dateDetected": null,
+      "category": "clubs",
+      "source": "https://hkust.edu.hk/student-life/clubs",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.932740+00:00"
+    },
+    {
+      "title": "HKUST-Led International Research Team Wins Prestigious Creativity Prize at the Prince Sultan Bin Abdulaziz International Prize for Water (PSIPW)",
+      "summary": "Prof. Mohamed Salah GHIDAOUI, Chinese Estates Professor of Engineering and Chair Professor of the Department of Civil and Environmental Engineering at The Hong Kong University of Science and Technology (HKUST), his international collaborators, and students have been awarded the Creativity Prize at the 12th Award of the PSIPW for their pioneering research in time reversal of waves and its successful translation into a novel diagnostic technology for pressurized water pipe networks. This “Creativity Prize,” valued at US$266,000, is widely recognized as one of the most prestigious honors in water engineering and science. The United Nations (UN) headquarters in Vienna served as the venue for the public announcement of the PSIPW awards in June 2026, during the water session of the 69th Committee on the Peaceful Uses of Outer Space (COPUOS). This same venue will also host the award presentation ceremony later this year.",
+      "url": "https://hkust.edu.hk/news/hkust-led-international-research-team-wins-prestigious-creativity-prize-prince-sultan-bin",
+      "date": "2026-07-24",
+      "dateDetected": "2026-07-24",
+      "category": "news",
+      "source": "https://hkust.edu.hk/news/listing",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.939817+00:00"
+    },
+    {
+      "title": "HKUST Develops New Biocompatible Chemical Reaction to Advance Next-Generation Anticancer Prodrugs",
+      "summary": "Anticancer prodrugs have attracted significant attention from the medical and scientific communities in recent years due to their potential to improve treatment precision while reducing adverse side effects. These drugs are specially engineered to remain inactive until they are activated at specific sites or under particular physiological conditions within the body, at which point they release their therapeutic effect. This targeted approach helps minimize damage to healthy tissues that often occurs when conventional chemotherapy agents attack cancer cells, addressing the longstanding challenge of collateral toxicity in cancer treatment.However, achieving precise drug activation within the body's highly complex biological environment remains a considerable challenge. Existing chemical strategies and activation technologies continue to face a number of technical limitations and obstacles, highlighting the need for further innovation in this field.",
+      "url": "https://hkust.edu.hk/news/hkust-develops-new-biocompatible-chemical-reaction-advance-next-generation-anticancer-prodrugs",
+      "date": "2026-07-24",
+      "dateDetected": "2026-07-24",
+      "category": "news",
+      "source": "https://hkust.edu.hk/news/listing",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.940599+00:00"
+    },
+    {
+      "title": "HKUST Scholars Honored as RGC Senior Research Fellow and Research Fellows for Outstanding Research Achievements",
+      "summary": "The Hong Kong University of Science and Technology (HKUST) has achieved notable achievements in the Research Grants Council's (RGC) Senior Research Fellow Scheme (SRFS) and Research Fellow Scheme (RFS) for the 2026/27 exercise, with three distinguished scholars receiving the fellowship awards. The honors recognize their pioneering research in frontier fields, including electrosynthesis, quantum materials, and generative artificial intelligence (GenAI), as well as their exceptional contributions to driving impactful scientific breakthroughs and advancing the frontiers of knowledge.",
+      "url": "https://hkust.edu.hk/news/hkust-scholars-honored-rgc-senior-research-fellow-and-research-fellows-outstanding-research",
+      "date": "2026-07-21",
+      "dateDetected": "2026-07-21",
+      "category": "news",
+      "source": "https://hkust.edu.hk/news/listing",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.941115+00:00"
+    },
+    {
+      "title": "HKUST Develops Ultra-Robust Acoustic Chip Technology to Advance 6G and Satellite Communications",
+      "summary": "Researchers from The Hong Kong University of Science and Technology (HKUST) have developed a novel chip architecture that enables the miniature acoustic devices inside smartphones to withstand over 12 times higher power loads while maintaining cooler and more stable operation. Tested on transducers vibrating more than two billion times per second, the new platform – named \"Layered Acoustic Wave\" (LAW) – reduced the operating temperature rise by 70% and set a record threshold power density of 36.4 W/mm². The breakthrough lifts a decades-old restriction that confined acoustic chips to small-signal processing, paving the way for a new generation of applications from direct-to-cell satellite communications and 6G networks to compact power conversion.",
+      "url": "https://hkust.edu.hk/news/hkust-develops-ultra-robust-acoustic-chip-technology-advance-6g-and-satellite-communications",
+      "date": "2026-07-21",
+      "dateDetected": "2026-07-21",
+      "category": "news",
+      "source": "https://hkust.edu.hk/news/listing",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.941539+00:00"
+    },
+    {
+      "title": "HKUST Improves Solar Cell Performance and Durability through Molecular Interface Engineering",
+      "summary": "Solar cells' efficiency and lifespan are often determined by what happens at interfaces — the microscopic boundaries where different materials meet. Researchers from The Hong Kong University of Science and Technology (HKUST) have contributed to two recently published studies that show molecular interface engineering can unlock major gains in the efficiency and durability of next-generation perovskite tandem solar cells.The two studies, published in academic journals Joule (impact factor: 37.1) and Nature Communications, focus on different tandem architectures but convey one common message: carefully designed molecular layers can do far more than connect materials. They can guide how perovskite films crystallize, suppress energy-wasting defects, promote charge transport and protect solar cells against degradation.",
+      "url": "https://hkust.edu.hk/news/hkust-improves-solar-cell-performance-and-durability-through-molecular-interface-engineering",
+      "date": "2026-07-17",
+      "dateDetected": "2026-07-17",
+      "category": "news",
+      "source": "https://hkust.edu.hk/news/listing",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.941981+00:00"
+    },
+    {
+      "title": "HKUST Hosts the 4th \"Four Seas Cup\" Hong Kong International University Student WeiQi Competition (Chinese Version Only)",
+      "summary": "由香港大灣區圍棋促進會及香港科技大學（科大）聯合主辦的第四屆「四洲盃」香港國際大學生圍棋公開賽，於7月14日至18日在科大校園隆重舉行。賽事開幕典禮於今日（7月15日）在科大逸夫演藝中心盛大舉行，並非常榮幸邀請到香港特別行政區政府教育局局長蔡若蓮博士等重量級嘉賓蒞臨主禮。出席開幕儀式的嘉賓亦包括：香港大灣區圍棋促進會會長徐瑩女士、科大副校長（大學拓展）吳宏偉教授、四洲集團創辦人兼主席戴德豐博士、深圳市文化廣電旅遊體育局副局長何建輝先生、中央政府駐港聯絡辦宣傳文體部副部長林枬先生、外交部駐港特派員公署發言人兼新聞及公共關係部主任黃景睿先生、新華社亞太總分社社長孫承斌先生、中央廣播電視總台香港記者站站長王喜凱先生、中央廣播電視總台亞太總站副站長李風先生、先施集團主席、全國政協委員林曉暉先生、香港新聞工作者聯會會長張國良先生及科大跨學科學院院長屈華民教授等。 今年適逢科大創校35周年，本屆賽事已列為校慶的亮點項目之一，其規模及嘉賓陣容均為歷屆之冠。本屆參賽隊伍由上屆的19支大幅增加至29支，匯聚全球25個國家及地區近90名頂尖大學生棋手同台對弈。賽事今年更迎來突破性的國際化升級，獲冠名贊助人戴德豐博士的鼎力支持與持續贊助，並首次迎來美國麻省理工學院、芝加哥大學，以及歐洲與拉丁美洲地區的棋手參賽；東南亞賽區則新增東盟聯隊、印尼隊及菲律賓隊；內地參賽陣容亦進一步擴大，四川大學、廈門大學、浙江大學、貴州大學及廣州華商學院五所高校首次派員參賽，充分實踐「棋聚四洲、手談天下」的主題目標。",
+      "url": "https://hkust.edu.hk/news/hkust-hosts-4th-four-seas-cup-hong-kong-international-university-student-weiqi-competition",
+      "date": "2026-07-15",
+      "dateDetected": "2026-07-15",
+      "category": "news",
+      "source": "https://hkust.edu.hk/news/listing",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.942433+00:00"
+    },
+    {
+      "title": "HKUST Launches Mandatory AI Common Core Program to Nurture Future Leaders  Comprehensive Scholarships to Attract Top Talent",
+      "summary": "In response to evolving talent needs, The Hong Kong University of Science and Technology (HKUST) continues to innovate its curriculum and strengthen student support. Following the launch of its Bachelor of Science (BSc) in Biomedical and Health Sciences program last year, which has emerged as HKUST’s most competitive program in this year’s admissions exercise, the University will introduce a mandatory Artificial Intelligence (AI) Common Core Program in the coming academic year to equip students with essential knowledge and competencies in human-AI collaboration and AI applications. In addition, HKUST offers scholarships and student-support initiatives comparable to those of leading universities in the city, providing students with rich learning experience opportunities through scholarships, overseas learning support, and a wide range of personal and professional development programs.AI Common Core Program for Future Innovators",
+      "url": "https://hkust.edu.hk/news/hkust-launches-mandatory-ai-common-core-program-nurture-future-leaders-comprehensive",
+      "date": "2026-07-14",
+      "dateDetected": "2026-07-14",
+      "category": "news",
+      "source": "https://hkust.edu.hk/news/listing",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.942842+00:00"
+    },
+    {
+      "title": "HKUST and Indonesia's Ministry of Higher Education, Science, and Technology Deepen Partnership with Garuda Scholarship Framework to Nurture Top-Tier Talent",
+      "summary": "The Hong Kong University of Science and Technology (HKUST) and the Ministry of Higher Education, Science, and Technology of the Republic of Indonesia have signed a new Memorandum of Understanding (MoU) to reinforce the implementation of an Indonesian government-funded scholarship framework aimed at cultivating top-tier future talent. A cornerstone of this collaboration is the integration of Indonesia’s newly launched Garuda Scholarship to support more outstanding students pursuing undergraduate studies at HKUST. Building on the cooperation agreement established in May 2024, the new MoU solidifies the formal scholarship framework while paving the way for both parties to explore further synergistic opportunities in student internships, academic exchanges, and joint research initiatives to drive innovation in higher education.",
+      "url": "https://hkust.edu.hk/news/hkust-and-indonesias-ministry-higher-education-science-and-technology-deepen-partnership",
+      "date": "2026-07-14",
+      "dateDetected": "2026-07-14",
+      "category": "news",
+      "source": "https://hkust.edu.hk/news/listing",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:26.943293+00:00"
+    },
+    {
+      "title": "About",
+      "summary": "We provide a breeding ground for tomorrow’s leaders to flourish.",
+      "url": "https://hkust.edu.hk/",
+      "date": null,
+      "dateDetected": null,
+      "category": "uncategorised",
+      "source": "https://hkust.edu.hk/about",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:27.992943+00:00"
+    },
+    {
+      "title": "News & Stories",
+      "summary": "Our latest endeavors are creating positive change in a dynamic global environment.",
+      "url": "https://35a.hkust.edu.hk/",
+      "date": "2026-06-16",
+      "dateDetected": "2026-06-16",
+      "category": "uncategorised",
+      "source": "https://hkust.edu.hk/",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:28.015137+00:00"
+    },
+    {
+      "title": "HKUST and HKUST(GZ) Present SURREALITY MR × AI Digital Art Cross-City Exhibition",
+      "summary": null,
+      "url": "https://hkust.edu.hk/news/hkust-and-hkustgz-present-surreality-mr-ai-digital-art-cross-city-exhibition",
+      "date": "2026-06-16",
+      "dateDetected": "2026-06-16",
+      "category": "uncategorised",
+      "source": "https://hkust.edu.hk/",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:28.015575+00:00"
+    },
+    {
+      "title": "HKUST Develops World's First AI Slide-Free Pathology Imaging System",
+      "summary": null,
+      "url": "https://hkust.edu.hk/news/hkust-develops-worlds-first-ai-slide-free-pathology-imaging-system",
+      "date": "2026-06-15",
+      "dateDetected": "2026-06-15",
+      "category": "uncategorised",
+      "source": "https://hkust.edu.hk/",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:28.015926+00:00"
+    },
+    {
+      "title": "HKUST Hosts Opening Ceremony for 'Jockey Club i-Village'",
+      "summary": null,
+      "url": "https://hkust.edu.hk/news/hkust-hosts-opening-ceremony-jockey-club-i-village",
+      "date": "2026-06-11",
+      "dateDetected": "2026-06-11",
+      "category": "uncategorised",
+      "source": "https://hkust.edu.hk/",
+      "school": null,
+      "scrapedAt": "2026-07-24T11:46:28.016269+00:00"
+    },
+    {
+      "title": "Saturday, August 8, 2026",
+      "summary": "Builds Bridges Between Data, Industry, and Human Spirit",
+      "url": "https://seng.hkust.edu.hk/",
+      "date": null,
+      "dateDetected": null,
+      "category": "academic",
+      "source": "https://seng.hkust.edu.hk/",
+      "school": {
+        "name": "School of Engineering",
+        "nameZh": "工程学院",
+        "code": "SENG"
+      },
+      "scrapedAt": "2026-07-24T11:46:30.550510+00:00"
+    },
+    {
+      "title": "News",
+      "summary": null,
+      "url": "https://seng.hkust.edu.hk/news/20260721/hkust-engineering-develops-ultra-robust-acoustic-chip-technology-advance-6g-and-satellite-communications",
+      "date": null,
+      "dateDetected": null,
+      "category": "academic",
+      "source": "https://seng.hkust.edu.hk/news",
+      "school": {
+        "name": "School of Engineering",
+        "nameZh": "工程学院",
+        "code": "SENG"
+      },
+      "scrapedAt": "2026-07-24T11:46:32.592006+00:00"
+    },
+    {
+      "title": "HKUST ranked no. 1 in Citations in Social Science among Asian Universities",
+      "summary": "",
+      "url": "https://shss.hkust.edu.hk/news/coding-communication-secondary-students-build-english-language-learning-apps-summer",
+      "date": null,
+      "dateDetected": null,
+      "category": "academic",
+      "source": "https://shss.hkust.edu.hk/",
+      "school": {
+        "name": "School of Humanities & Social Science",
+        "nameZh": "人文社会科学学院",
+        "code": "SHSS"
+      },
+      "scrapedAt": "2026-07-24T11:46:32.670741+00:00"
+    },
+    {
+      "title": "SHSS News and Events Side Menu",
+      "summary": null,
+      "url": "https://shss.hkust.edu.hk/news",
+      "date": null,
+      "dateDetected": null,
+      "category": "academic",
+      "source": "https://shss.hkust.edu.hk/news",
+      "school": {
+        "name": "School of Humanities & Social Science",
+        "nameZh": "人文社会科学学院",
+        "code": "SHSS"
+      },
+      "scrapedAt": "2026-07-24T11:46:33.239366+00:00"
+    },
+    {
+      "title": "Home",
+      "summary": "Explore different library zones to match your study style—solo, silent, or group work.",
+      "url": "https://library.hkust.edu.hk/facilities-space/space/places-study",
+      "date": null,
+      "dateDetected": null,
+      "category": "uncategorised",
+      "source": "https://library.hkust.edu.hk/",
+      "school": {
+        "name": "Library",
+        "nameZh": "图书馆",
+        "code": "LIB"
+      },
+      "scrapedAt": "2026-07-24T11:46:33.955843+00:00"
+    },
+    {
+      "title": "2016-Mar-22",
+      "summary": null,
+      "url": "http://career.hkust.edu.hk/web/news.php",
+      "date": null,
+      "dateDetected": null,
+      "category": "uncategorised",
+      "source": "https://career.hkust.edu.hk/web/home.php",
+      "school": {
+        "name": "Career Centre",
+        "nameZh": "职业发展中心",
+        "code": "CAREER"
+      },
+      "scrapedAt": "2026-07-24T11:46:35.021810+00:00"
+    },
+    {
+      "title": "2026-Jun-01",
+      "summary": null,
+      "url": "https://dst.hkust.edu.hk/student-life/roc",
+      "date": null,
+      "dateDetected": null,
+      "category": "uncategorised",
+      "source": "https://career.hkust.edu.hk/web/home.php",
+      "school": {
+        "name": "Career Centre",
+        "nameZh": "职业发展中心",
+        "code": "CAREER"
+      },
+      "scrapedAt": "2026-07-24T11:46:35.022523+00:00"
+    },
+    {
+      "title": "2022-Apr-13",
+      "summary": null,
+      "url": "https://career.hkust.edu.hk/web/page.php?sid=85",
+      "date": null,
+      "dateDetected": null,
+      "category": "uncategorised",
+      "source": "https://career.hkust.edu.hk/web/home.php",
+      "school": {
+        "name": "Career Centre",
+        "nameZh": "职业发展中心",
+        "code": "CAREER"
+      },
+      "scrapedAt": "2026-07-24T11:46:35.022982+00:00"
+    },
+    {
+      "title": "2025-Sep-04",
+      "summary": null,
+      "url": "http://career.hkust.edu.hk/web/job.php",
+      "date": null,
+      "dateDetected": null,
+      "category": "uncategorised",
+      "source": "https://career.hkust.edu.hk/web/home.php",
+      "school": {
+        "name": "Career Centre",
+        "nameZh": "职业发展中心",
+        "code": "CAREER"
+      },
+      "scrapedAt": "2026-07-24T11:46:35.023369+00:00"
+    }
+  ]
+}
