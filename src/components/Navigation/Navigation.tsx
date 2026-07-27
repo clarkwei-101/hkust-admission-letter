@@ -85,7 +85,7 @@ export default function Navigation({ showBackButton = false, title }: Navigation
                   {title || 'HKUST Admission'}
                 </h1>
                 <p className="text-xs text-[#C0C0C0] hidden md:block truncate">
-                  Hong Kong University of Science and Technology
+                  The Hong Kong University of Science and Technology
                 </p>
               </div>
             </div>

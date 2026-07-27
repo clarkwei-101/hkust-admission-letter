@@ -285,7 +285,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
               {displayName}
             </p>
             <p className="text-[#C0C0C0] mt-4 md:mt-5 text-sm md:text-base tracking-widest">
-              2026 Intake · Offer Holder
+              2026 Intake · Class of 2026
             </p>
           </motion.div>
 
@@ -310,7 +310,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
                 <span className="text-[10px] md:text-xs uppercase tracking-widest text-[#996600]">Welcome</span>
               </div>
               <p className="text-white/80 text-sm md:text-base leading-relaxed">
-                We are delighted to officially welcome you to the Hong Kong University of Science and Technology — Class of 2026 (Intake).
+                We are delighted to officially welcome you to The Hong Kong University of Science and Technology — Class of 2026 (Intake).
               </p>
             </div>
 
@@ -327,7 +327,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-white/60">Semester begins</span>
-                    <span className="text-white font-semibold">2 Sep 2026</span>
+                    <span className="text-white font-semibold">1 Sep 2026</span>
                   </div>
                 </div>
               </div>
@@ -410,7 +410,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
           <div className="mt-16 text-center">
             <div className="w-32 h-[1px] bg-gradient-to-r from-transparent via-[#996600]/50 to-transparent mx-auto mb-4" />
             <p className="text-[#996600]/50 text-[10px] tracking-[0.3em] uppercase">
-              Hong Kong University of Science and Technology · Admissions Office
+              The Hong Kong University of Science and Technology · Admissions Office
             </p>
           </div>
 
@@ -539,7 +539,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
             {/* Bottom inscription inside envelope */}
             <div className="text-center mt-8 pb-6 px-6">
               <p className="text-[#996600]/80 tracking-[0.3em] text-[10px] font-medium uppercase">
-                Hong Kong University of Science and Technology
+                The Hong Kong University of Science and Technology
               </p>
             </div>
           </div>

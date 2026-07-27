@@ -142,13 +142,12 @@ export const WELCOME_DATA = {
   subtitleZh: '您的学术之旅由此开启',
   academicYear: '2026-2027',
   semesterDates: {
-    term1: '2026年9月2日 - 2026年12月5日',
-    term2: '2027年1月13日 - 2027年5月9日',
+    term1: '2026年9月1日 - 2026年12月5日',
+    term2: '2027年2月1日 - 2027年5月8日',
   },
   importantDates: [
-    { date: '2026年8月15日', event: '新生注册截止', color: '#003366' },
     { date: '2026年8月25日', event: '新生Orientation Week开始', color: '#996600' },
-    { date: '2026年9月2日', event: '秋季学期正式开学', color: '#003366' },
+    { date: '2026年9月1日', event: '秋季学期正式开学', color: '#003366' },
   ],
 } as const;
 

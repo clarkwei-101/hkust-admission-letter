@@ -192,7 +192,7 @@ export default function VirtualTourPage() {
               <div className="flex items-center gap-2 text-white/80 text-sm">
                 <Compass className="w-4 h-4 text-[#996600]" />
                 <span>{t.virtualTour.liveMapTitle}</span>
-                <span className="text-white/40 text-xs">· Hong Kong University of Science and Technology · 3D Interactive Map</span>
+                <span className="text-white/40 text-xs">· The Hong Kong University of Science and Technology · 3D Interactive Map</span>
               </div>
               <a
                 href="https://www.google.com/maps/place/Hong+Kong+University+of+Science+and+Technology+(HKUST)/@22.2525,114.2145,15z/"

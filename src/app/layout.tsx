@@ -19,7 +19,7 @@ const notoSans = Noto_Sans_SC({
 
 export const metadata: Metadata = {
   title: "HKUST 录取通知书 | Admission Letter 2026",
-  description: "Hong Kong University of Science and Technology digital admission experience. 香港科技大学数字入学体验。",
+  description: "The Hong Kong University of Science and Technology digital admission experience. 香港科技大学数字入学体验。",
   icons: {
     icon: [
       {

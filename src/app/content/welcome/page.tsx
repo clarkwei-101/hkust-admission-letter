@@ -10,9 +10,8 @@ import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 
 const IMPORTANT_DATES = [
-  { dateEn: '15 Aug 2026', eventEn: 'Programme Registration deadline', eventZh: '新生注册截止', color: '#003366' },
   { dateEn: '25 Aug 2026', eventEn: 'Orientation Week begins', eventZh: '新生Orientation Week开始', color: '#996600' },
-  { dateEn: '2 Sep 2026', eventEn: 'Fall Semester begins', eventZh: '秋季学期正式开学', color: '#003366' },
+  { dateEn: '1 Sep 2026', eventEn: 'Fall Semester begins', eventZh: '秋季学期正式开学', color: '#003366' },
 ];
 
 export default function WelcomePage() {
@@ -114,11 +113,11 @@ export default function WelcomePage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 rounded-lg bg-[#003366]/30">
                   <span className="text-[#C0C0C0]">{isZh ? '第一学期' : 'Fall Term'}</span>
-                  <span className="text-white font-medium text-sm">2 Sep – 5 Dec 2026</span>
+                  <span className="text-white font-medium text-sm">1 Sep – 5 Dec 2026</span>
                 </div>
                 <div className="flex justify-between items-center p-3 rounded-lg bg-[#003366]/30">
                   <span className="text-[#C0C0C0]">{isZh ? '第二学期' : 'Spring Term'}</span>
-                  <span className="text-white font-medium text-sm">13 Jan – 9 May 2027</span>
+                  <span className="text-white font-medium text-sm">1 Feb – 8 May 2027</span>
                 </div>
               </div>
             </div>
