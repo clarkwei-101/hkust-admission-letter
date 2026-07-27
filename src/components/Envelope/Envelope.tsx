@@ -247,7 +247,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
               transition={{ delay: 0.6, duration: 0.8 }}
               className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
             >
-              Hong Kong University
+              The Hong Kong University
               <br />
               <span className="text-[#996600]">of Science and Technology</span>
             </motion.h1>

@@ -5,12 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bus, ArrowRight, ArrowLeftRight, RefreshCw, Clock, Users, Coffee, MapPin, ShowerHead,
   BookOpen, Wifi, Utensils, Heart, Volume2, Accessibility, Compass, Phone, Search,
-  ExternalLink,
+  ExternalLink, Loader2,
 } from 'lucide-react';
 import Navigation from '@/components/Navigation/Navigation';
 import AIClubBanner from '@/components/AIClubBanner/AIClubBanner';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
+import dynamic from 'next/dynamic';
+import { hkustData } from '@/components/HKUSTThreeMap';
 
 type RouteId = '11' | '11M' | '11S' | '12' | '792M';
 
@@ -81,11 +83,24 @@ export default function CampusLivePage() {
   const { name } = usePersonalisation();
   const isZh = locale === 'zh';
 
+  const HKUSTThreeMapLive = dynamic(
+    () => import('@/components/HKUSTThreeMap/HKUSTThreeMap'),
+    {
+      ssr: false,
+      loading: () => (
+        <div className="flex items-center justify-center h-full">
+          <Loader2 className="w-8 h-8 text-[#d4a84b] animate-spin" />
+        </div>
+      ),
+    }
+  );
+
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [tick, setTick] = useState(0);
   const [from, setFrom] = useState('lib');
   const [to, setTo] = useState('ssc');
   const [activePin, setActivePin] = useState<string | null>(null);
+  const [mapSelected, setMapSelected] = useState<string | null>(null);
   const intervalRef = useRef<number | null>(null);
 
   // Auto-refresh simulating live data
@@ -337,112 +352,18 @@ export default function CampusLivePage() {
                 </a>
               </div>
 
-              {/* Map */}
-              <div className="rounded-2xl p-3 bg-white/5 border border-white/10">
-                <svg viewBox="0 0 100 100" className="w-full h-auto">
-                  <defs>
-                    <linearGradient id="mapBg" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#1a3a5c" />
-                      <stop offset="100%" stopColor="#0d2540" />
-                    </linearGradient>
-                  </defs>
-                  <rect width="100" height="100" fill="url(#mapBg)" />
-
-                  {/* Grid lines for visual context */}
-                  <g stroke="#C0C0C0" strokeWidth="0.08" opacity="0.08">
-                    {[20, 40, 60, 80].map((v) => (
-                      <g key={v}>
-                        <line x1="0" y1={v} x2="100" y2={v} />
-                        <line x1={v} y1="0" x2={v} y2="100" />
-                      </g>
-                    ))}
-                  </g>
-
-                  {/* Campus boundary */}
-                  <rect x="5" y="20" width="90" height="75" fill="none" stroke="#60A5FA" strokeWidth="0.15" strokeDasharray="1,0.5" opacity="0.3" rx="2" />
-
-                  {/* Roads */}
-                  <g stroke="#d4a84b" strokeWidth="0.25" fill="none" opacity="0.35">
-                    <path d="M 10,55 L 90,55" />
-                    <path d="M 50,20 L 50,90" />
-                    <path d="M 18,50 Q 35,60 50,70 Q 65,80 82,52" />
-                  </g>
-
-                  {/* Route line */}
-                  {(() => {
-                    const fromB = BUILDINGS_PINS.find((p) => p.id === from);
-                    const toB = BUILDINGS_PINS.find((p) => p.id === to);
-                    if (!fromB || !toB) return null;
-                    const mx = (fromB.x + toB.x) / 2;
-                    const my = (fromB.y + toB.y) / 2 - 8;
-                    return (
-                      <g key={`route-${from}-${to}`}>
-                        <path
-                          d={`M ${fromB.x},${fromB.y} Q ${mx},${my} ${toB.x},${toB.y}`}
-                          stroke="rgba(0,0,0,0.4)"
-                          strokeWidth="1.2"
-                          fill="none"
-                        />
-                        <path
-                          d={`M ${fromB.x},${fromB.y} Q ${mx},${my} ${toB.x},${toB.y}`}
-                          stroke="#d4a84b"
-                          strokeWidth="0.9"
-                          strokeDasharray="2,1"
-                          fill="none"
-                        />
-                        <circle cx={toB.x} cy={toB.y} r="1.2" fill="#FF6B35" stroke="#fff" strokeWidth="0.2" />
-                      </g>
-                    );
-                  })()}
-
-                  {/* Buildings */}
-                  {BUILDINGS_PINS.map((b) => {
-                    const isFrom = b.id === from;
-                    const isTo = b.id === to;
-                    const isActive = isFrom || isTo;
-                    const color = isFrom ? '#2E7D32' : isTo ? '#FF6B35' : '#60A5FA';
-                    return (
-                      <g key={b.id}>
-                        {isActive && (
-                          <circle cx={b.x} cy={b.y} r="5" fill="none" stroke={color} strokeWidth="0.3">
-                            <animate attributeName="r" from="4" to="8" dur="1.5s" repeatCount="indefinite" />
-                            <animate attributeName="opacity" from="0.8" to="0" dur="1.5s" repeatCount="indefinite" />
-                          </circle>
-                        )}
-                        <circle
-                          cx={b.x}
-                          cy={b.y}
-                          r={isActive ? 2.5 : 2}
-                          fill={color}
-                          stroke={isActive ? '#fff' : 'none'}
-                          strokeWidth="0.3"
-                        />
-                        <text
-                          x={b.x}
-                          y={b.y - 3.5}
-                          fill="white"
-                          fontSize="2"
-                          textAnchor="middle"
-                          fontWeight="bold"
-                        >
-                          {isZh ? b.name.zh : b.name.en}
-                        </text>
-                      </g>
-                    );
-                  })}
-
-                  {/* Compass */}
-                  <g transform="translate(92, 92)">
-                    <circle r="3.5" fill="#003366" stroke="#996600" strokeWidth="0.25" />
-                    <text y="-1" fontSize="1.8" fill="white" textAnchor="middle" fontWeight="bold">N</text>
-                    <line x1="0" y1="-2.5" x2="0" y2="1.5" stroke="#d4a84b" strokeWidth="0.2" />
-                  </g>
-                </svg>
-
-                <div className="flex items-center justify-center gap-4 text-xs mt-2 text-white/60">
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#2E7D32]" /> From</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#FF6B35]" /> To</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#60A5FA]" /> Landmark</span>
+              {/* 3D HKUST Campus Map */}
+              <div className="rounded-2xl overflow-hidden bg-white/5 border border-white/10">
+                <div className="relative w-full h-[320px] md:h-[400px]">
+                  <HKUSTThreeMapLive
+                    data={hkustData}
+                    onSelect={setMapSelected}
+                    selected={mapSelected}
+                  />
+                  <div className="pointer-events-none absolute bottom-3 right-3 px-3 py-1.5 rounded-md bg-black/70 text-white/80 text-xs backdrop-blur flex items-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#d4a84b]" />
+                    {t.virtualTour.liveMapCaption}
+                  </div>
                 </div>
               </div>
             </div>
