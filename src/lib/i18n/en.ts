@@ -41,6 +41,8 @@ const en = {
     envelope: {
       open: 'Open Letter',
       seal: 'Admissions Office · HKUST',
+      curtainLabel: 'HKUST SEAL',
+      curtainHint: 'Tap to reveal',
       fromLabel: 'From',
       toLabel: 'For',
       degree: '2026 Intake · Class of 2026',

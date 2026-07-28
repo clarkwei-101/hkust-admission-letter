@@ -44,6 +44,8 @@ const zh = {
     envelope: {
       open: '打开通知书',
       seal: 'HKUST 招生处',
+      curtainLabel: '港科大火漆印',
+      curtainHint: '轻触揭开',
       fromLabel: '发件人',
       toLabel: '收件人',
       degree: `${ADMISSION_YEAR} 届 · 2026级`,

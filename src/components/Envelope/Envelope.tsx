@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Mail, Sparkles, GraduationCap, MapPin, Calendar, Users, PartyPopper } from 'lucide-react';
 import Fireworks from '@/components/Fireworks/Fireworks';
 import Disclaimer from '@/components/Disclaimer/Disclaimer';
+import Curtain from '@/components/Curtain/Curtain';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 
@@ -406,11 +407,12 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
             </motion.div>
           )}
 
-          {/* Footer */}
+          {/* Footer — explicitly no longer carries the institutional
+              "Admissions Office · HKUST" line per design request. */}
           <div className="mt-16 text-center">
             <div className="w-32 h-[1px] bg-gradient-to-r from-transparent via-[#996600]/50 to-transparent mx-auto mb-4" />
             <p className="text-[#996600]/50 text-[10px] tracking-[0.3em] uppercase">
-              The Hong Kong University of Science and Technology · Admissions Office
+              AI × SCI-FI CLUB · STUDENT-MADE
             </p>
           </div>
 
@@ -492,10 +494,21 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
           {/* Body */}
           <div ref={bottomRef} className="relative bg-[#0a1628]">
             <div className="text-center pt-6 px-8 space-y-1">
-              <div className="flex items-center justify-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/40">
-                <span className="w-12 h-px bg-white/20" />
-                {t.home.envelope.seal}
-                <span className="w-12 h-px bg-white/20" />
+              {/* Cover the HKUST seal label behind a curtain so the closed
+                  envelope no longer advertises the university branding up
+                  front. The two fabric halves slide apart on tap. */}
+              <div className="relative h-7">
+                <div className="absolute inset-0 flex items-center justify-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/40 pointer-events-none">
+                  <span className="w-12 h-px bg-white/20" />
+                  {t.home.envelope.seal}
+                  <span className="w-12 h-px bg-white/20" />
+                </div>
+                <Curtain
+                  open={isOpening}
+                  label={t.home.envelope.curtainLabel ?? 'HKUST SEAL'}
+                  hint={t.home.envelope.curtainHint ?? 'Tap to reveal'}
+                  className="absolute inset-x-0 inset-y-0"
+                />
               </div>
               <p className="text-[#996600]/60 text-[9px] tracking-[0.25em] uppercase pt-1">
                 {t.home.disclaimer.short}
