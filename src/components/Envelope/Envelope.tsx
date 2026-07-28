@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { Mail, Sparkles, GraduationCap, MapPin, Calendar, Users, PartyPopper } from 'lucide-react';
 import Fireworks from '@/components/Fireworks/Fireworks';
 import Disclaimer from '@/components/Disclaimer/Disclaimer';
-import Curtain from '@/components/Curtain/Curtain';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 
@@ -552,24 +551,14 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
             }}
           >
             <div className="text-center space-y-3">
-              {/* HKUST seal — covered by a curtain that reveals on tap */}
-              <div className="relative inline-block">
-                <div className="space-y-3 pointer-events-none">
-                  <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/30">
-                    <span className="text-[#996600] font-bold text-base">HKUST</span>
-                  </div>
-                  <p className="text-[#996600] text-sm tracking-wider">Welcome to HKUST</p>
-                </div>
-                <Curtain
-                  label={t.home.envelope.curtainLabel ?? 'HKUST'}
-                  hint={t.home.envelope.curtainHint ?? 'Tap to reveal'}
-                  className="absolute inset-0 rounded-2xl"
-                />
+              <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/30">
+                <span className="text-[#996600] font-bold text-base">HKUST</span>
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white mb-1">
                   {t.home.greeting} <span className="text-[#d4a84b]">{displayName}</span>{t.home.greetingSuffix}
                 </h2>
+                <p className="text-[#996600] text-sm tracking-wider">Welcome to HKUST</p>
               </div>
               <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-[#996600] to-transparent mx-auto" />
               <p className="text-white/70 text-xs">{t.home.caption}</p>
