@@ -494,22 +494,9 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
           {/* Body */}
           <div ref={bottomRef} className="relative bg-[#0a1628]">
             <div className="text-center pt-6 px-8 space-y-1">
-              {/* Cover the HKUST seal label behind a curtain so the closed
-                  envelope no longer advertises the university branding up
-                  front. The two fabric halves slide apart on tap. */}
-              <div className="relative h-7">
-                <div className="absolute inset-0 flex items-center justify-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/40 pointer-events-none">
-                  <span className="w-12 h-px bg-white/20" />
-                  {t.home.envelope.seal}
-                  <span className="w-12 h-px bg-white/20" />
-                </div>
-                <Curtain
-                  open={isOpening}
-                  label={t.home.envelope.curtainLabel ?? 'HKUST SEAL'}
-                  hint={t.home.envelope.curtainHint ?? 'Tap to reveal'}
-                  className="absolute inset-x-0 inset-y-0"
-                />
-              </div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">
+                {t.home.envelope.seal}
+              </p>
               <p className="text-[#996600]/60 text-[9px] tracking-[0.25em] uppercase pt-1">
                 {t.home.disclaimer.short}
               </p>
@@ -568,14 +555,24 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
             }}
           >
             <div className="text-center space-y-3">
-              <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/30">
-                <span className="text-[#996600] font-bold text-base">HKUST</span>
+              {/* HKUST seal — covered by a curtain that reveals on tap */}
+              <div className="relative inline-block">
+                <div className="space-y-3 pointer-events-none">
+                  <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/30">
+                    <span className="text-[#996600] font-bold text-base">HKUST</span>
+                  </div>
+                  <p className="text-[#996600] text-sm tracking-wider">Welcome to HKUST</p>
+                </div>
+                <Curtain
+                  label={t.home.envelope.curtainLabel ?? 'HKUST'}
+                  hint={t.home.envelope.curtainHint ?? 'Tap to reveal'}
+                  className="absolute inset-0 rounded-2xl"
+                />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white mb-1">
                   {t.home.greeting} <span className="text-[#d4a84b]">{displayName}</span>{t.home.greetingSuffix}
                 </h2>
-                <p className="text-[#996600] text-sm tracking-wider">Welcome to HKUST</p>
               </div>
               <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-[#996600] to-transparent mx-auto" />
               <p className="text-white/70 text-xs">{t.home.caption}</p>
