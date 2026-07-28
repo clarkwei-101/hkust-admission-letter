@@ -43,7 +43,7 @@ export default function Curtain({
         {!isOpen && (
           <motion.div
             key="curtain-cover"
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
