@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { Mail, Sparkles, MapPin, Calendar, Users, PartyPopper } from 'lucide-react';
 import Fireworks from '@/components/Fireworks/Fireworks';
 import Disclaimer from '@/components/Disclaimer/Disclaimer';
-import Curtain from '@/components/Curtain/Curtain';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 
@@ -46,6 +45,7 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
   const [isOpening, setIsOpening] = useState(false);
   const [isLetterExpanded, setIsLetterExpanded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [curtainOpen, setCurtainOpen] = useState(false);
   const [currentBlessing] = useState(() => pickBlessing());
   const letterAudioRef = useRef<HTMLAudioElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -224,18 +224,64 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
 
           {/* Header */}
           <div className="flex flex-col items-center text-center mb-10">
-            {/* HKUST seal badge — covered by a full-page curtain that reveals on tap.
-                The badge renders behind the curtain (initially invisible). */}
+            {/* HKUST seal badge + full-page curtain */}
             <div
               className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/50 shadow-2xl mb-5"
             >
               <span className="text-[#996600] font-bold text-base md:text-lg tracking-tight">HKUST</span>
             </div>
-            <Curtain
-              label={t.home.envelope.curtainLabel ?? 'HKUST'}
-              hint={t.home.envelope.curtainHint ?? 'Tap to reveal'}
-              className="pointer-events-auto"
-            />
+            {/* Full-page curtain overlay — renders on top of everything */}
+            {!curtainOpen && (
+              <div
+                className="fixed inset-0 z-[9999] flex items-center justify-center cursor-pointer"
+                onClick={() => setCurtainOpen(true)}
+              >
+                {/* Left panel */}
+                <div
+                  className="absolute top-0 left-0 w-1/2 h-full overflow-hidden"
+                  style={{
+                    transform: curtainOpen ? 'translateX(-100%)' : 'translateX(0)',
+                    transition: 'transform 0.9s cubic-bezier(0.6, 0.05, 0.2, 0.95)',
+                  }}
+                >
+                  <div
+                    className="h-full w-[200vw]"
+                    style={{
+                      background: 'linear-gradient(90deg, #6b1f1f 0%, #8b2c2c 35%, #5a1414 70%, #3d0d0d 100%)',
+                      boxShadow: 'inset -8px 0 18px rgba(0,0,0,0.45), 4px 0 8px rgba(0,0,0,0.5)',
+                    }}
+                  />
+                </div>
+                {/* Right panel */}
+                <div
+                  className="absolute top-0 right-0 w-1/2 h-full overflow-hidden"
+                  style={{
+                    transform: curtainOpen ? 'translateX(100%)' : 'translateX(0)',
+                    transition: 'transform 0.9s cubic-bezier(0.6, 0.05, 0.2, 0.95)',
+                  }}
+                >
+                  <div
+                    className="h-full w-[200vw]"
+                    style={{
+                      background: 'linear-gradient(270deg, #6b1f1f 0%, #8b2c2c 35%, #5a1414 70%, #3d0d0d 100%)',
+                      boxShadow: 'inset 8px 0 18px rgba(0,0,0,0.45), -4px 0 8px rgba(0,0,0,0.5)',
+                    }}
+                  />
+                </div>
+                {/* Center label */}
+                <div className="relative z-10 flex flex-col items-center text-center px-3 pointer-events-none">
+                  <svg className="w-6 h-6 text-[#d4a84b] mb-2 animate-pulse" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3" />
+                  </svg>
+                  <span className="text-xs md:text-sm uppercase tracking-[0.35em] font-semibold text-[#d4a84b]">
+                    {t.home.envelope.curtainLabel ?? 'HKUST'}
+                  </span>
+                  <span className="text-[9px] md:text-xs uppercase tracking-[0.25em] mt-1 text-white/70">
+                    {t.home.envelope.curtainHint ?? 'Tap to reveal'}
+                  </span>
+                </div>
+              </div>
+            )}
 
             <motion.p
               initial={{ opacity: 0 }}

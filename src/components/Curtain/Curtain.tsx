@@ -19,6 +19,8 @@ export default function Curtain({
   const [localOpen, setLocalOpen] = useState(false);
   const isOpen = controlledOpen || localOpen;
 
+  console.log('[Curtain] mounted, isOpen:', isOpen);
+
   return (
     <>
       {/* Curtain overlay — always visible when closed, sits at page center */}
