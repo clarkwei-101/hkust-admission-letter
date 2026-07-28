@@ -3,9 +3,10 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { motion } from 'framer-motion';
-import { Mail, Sparkles, GraduationCap, MapPin, Calendar, Users, PartyPopper } from 'lucide-react';
+import { Mail, Sparkles, MapPin, Calendar, Users, PartyPopper } from 'lucide-react';
 import Fireworks from '@/components/Fireworks/Fireworks';
 import Disclaimer from '@/components/Disclaimer/Disclaimer';
+import Curtain from '@/components/Curtain/Curtain';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
 
@@ -223,13 +224,24 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
 
           {/* Header */}
           <div className="flex flex-col items-center text-center mb-10">
+            {/* HKUST seal badge — covered by a curtain so the student's name is the
+                first thing revealed. The two fabric halves slide apart on tap. */}
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
-              className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/50 shadow-2xl mb-5"
+              className="relative mb-5"
             >
-              <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-[#996600]" />
+              <div className="pointer-events-none">
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/50 shadow-2xl">
+                  <span className="text-[#996600] font-bold text-base md:text-lg tracking-tight">HKUST</span>
+                </div>
+              </div>
+              <Curtain
+                label={t.home.envelope.curtainLabel ?? 'HKUST'}
+                hint={t.home.envelope.curtainHint ?? 'Tap to reveal'}
+                className="absolute inset-0 rounded-full"
+              />
             </motion.div>
 
             <motion.p
