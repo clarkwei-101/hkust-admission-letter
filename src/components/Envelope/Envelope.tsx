@@ -512,9 +512,6 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
               >
                 {displayName}
               </p>
-              <p className="text-sm text-[#C0C0C0] mt-2 tracking-wider">
-                {t.home.envelope.degree}
-              </p>
             </div>
 
             {/* Open Letter button — fully inside the envelope so nothing clips it */}
