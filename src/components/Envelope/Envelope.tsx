@@ -231,9 +231,10 @@ export default function Envelope({ onOpenComplete, soundEnabled: _soundEnabled }
               animate={{ scale: 1 }}
               transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
               className="relative mb-5"
+              style={{ width: '5rem', height: '5rem' }}
             >
-              <div className="pointer-events-none">
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/50 shadow-2xl">
+              <div className="absolute inset-0 rounded-full">
+                <div className="w-full h-full rounded-full bg-gradient-to-br from-[#003366] to-[#1a4d7c] flex items-center justify-center border-2 border-[#996600]/50 shadow-2xl">
                   <span className="text-[#996600] font-bold text-base md:text-lg tracking-tight">HKUST</span>
                 </div>
               </div>
