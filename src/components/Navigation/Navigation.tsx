@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { Home, ArrowLeft, Edit3 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 import { usePersonalisation } from '@/lib/personalisation';
+import { useSiteConfig } from '@/lib/university';
 import { LanguageSwitcher } from '@/components/Providers/Providers';
 
 interface NavigationProps {
@@ -19,6 +20,8 @@ export default function Navigation({ showBackButton = false, title }: Navigation
   const router = useRouter();
   const { t, locale } = useI18n();
   const { name, setName } = usePersonalisation();
+  const site = useSiteConfig();
+  const theme = site.theme;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -49,6 +52,11 @@ export default function Navigation({ showBackButton = false, title }: Navigation
     router.push('/');
   };
 
+  const badgeStyle = {
+    background: `linear-gradient(135deg, ${theme.blue}, ${theme.gradient.to})`,
+    border: `1px solid ${theme.gold}4D`,
+  };
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
@@ -71,48 +79,70 @@ export default function Navigation({ showBackButton = false, title }: Navigation
                 className="flex items-center flex-shrink-0"
                 aria-label={t.common.back}
               >
-                <ArrowLeft className="w-5 h-5 text-[#C0C0C0] group-hover:text-[#996600] transition-colors" />
+                <ArrowLeft
+                  className="w-5 h-5 transition-colors"
+                  style={{ color: theme.silver }}
+                />
               </motion.button>
             )}
             <div className="flex items-center gap-3 min-w-0">
               <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#003366] to-[#1a4d7c] rounded-lg flex items-center justify-center border border-[#996600]/30">
-                  <span className="text-[#996600] font-bold text-lg md:text-xl">HK</span>
+                <div
+                  className="absolute inset-0 rounded-lg flex items-center justify-center"
+                  style={badgeStyle}
+                >
+                  <span
+                    className="font-bold text-lg md:text-xl"
+                    style={{ color: theme.gold }}
+                  >
+                    {site.shortCode}
+                  </span>
                 </div>
               </div>
               <div className="min-w-0">
                 <h1 className="text-sm md:text-base font-semibold text-white truncate">
-                  {title || 'HKUST Admission'}
+                  {title || `${site.shortCode} Admission`}
                 </h1>
-                <p className="text-xs text-[#C0C0C0] hidden md:block truncate">
-                  The Hong Kong University of Science and Technology
+                <p
+                  className="text-xs hidden md:block truncate"
+                  style={{ color: theme.silver }}
+                >
+                  {site.nameEn}
                 </p>
               </div>
             </div>
           </Link>
 
           <div className="hidden md:flex items-center gap-5 lg:gap-6">
-            <NavLink href="/hub" isActive={pathname === '/hub'}>
+            <NavLink href="/hub" isActive={pathname === '/hub'} theme={theme}>
               {t.nav.home}
             </NavLink>
-            <NavLink href="/content/welcome" isActive={pathname.includes('/welcome')}>
+            <NavLink href="/content/welcome" isActive={pathname.includes('/welcome')} theme={theme}>
               {t.nav.welcome}
             </NavLink>
-            <NavLink href="/content/resources" isActive={pathname.includes('/resources')}>
+            <NavLink href="/content/resources" isActive={pathname.includes('/resources')} theme={theme}>
               {t.nav.resources}
             </NavLink>
-            <NavLink href="/content/checklist" isActive={pathname.includes('/checklist')}>
+            <NavLink href="/content/checklist" isActive={pathname.includes('/checklist')} theme={theme}>
               {t.nav.checklist}
             </NavLink>
-            <NavLink href="/content/campus-live" isActive={pathname.includes('/campus-live')}>
+            <NavLink href="/content/campus-live" isActive={pathname.includes('/campus-live')} theme={theme}>
               {locale === 'zh' ? '实时校园' : 'Live Campus'}
+            </NavLink>
+            <NavLink href="/preview" isActive={pathname === '/preview'} theme={theme}>
+              {locale === 'zh' ? '模板' : 'Templates'}
             </NavLink>
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
             {name && (
               <div
-                className="hidden xl:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#996600]/15 border border-[#996600]/30 text-[#d4a84b] text-xs font-medium"
+                className="hidden xl:inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
+                style={{
+                  background: `${theme.gold}26`,
+                  border: `1px solid ${theme.gold}4D`,
+                  color: theme.highlightGold,
+                }}
                 title={t.nav.personaliseLabel}
               >
                 <span className="max-w-[120px] truncate">{name}</span>
@@ -132,7 +162,10 @@ export default function Navigation({ showBackButton = false, title }: Navigation
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-lg bg-[#003366]/50 text-white hover:bg-[#003366] transition-colors"
+                className="p-2 rounded-lg text-white transition-colors"
+                style={{
+                  background: `${theme.blue}80`,
+                }}
                 aria-label={t.nav.home}
               >
                 <Home className="w-5 h-5" />
@@ -142,34 +175,37 @@ export default function Navigation({ showBackButton = false, title }: Navigation
         </div>
       </div>
 
-      <div className="h-[1px] bg-gradient-to-r from-transparent via-[#996600]/30 to-transparent" />
+      <div
+        className="h-[1px]"
+        style={{ background: `linear-gradient(90deg, transparent, ${theme.gold}4D, transparent)` }}
+      />
     </motion.nav>
   );
 }
 
-function NavLink({
-  href,
-  children,
-  isActive,
-}: {
+interface NavLinkProps {
   href: string;
-  children: React.ReactNode;
   isActive?: boolean;
-}) {
+  children: React.ReactNode;
+  theme: ReturnType<typeof useSiteConfig>['theme'];
+}
+
+function NavLink({ href, isActive, children, theme }: NavLinkProps) {
   return (
     <Link href={href}>
       <motion.span
-        className={`
-          relative px-2.5 py-2 text-sm font-medium transition-colors whitespace-nowrap
-          ${isActive ? 'text-[#d4a84b]' : 'text-[#C0C0C0] hover:text-white'}
-        `}
+        className="relative px-2.5 py-2 text-sm font-medium transition-colors whitespace-nowrap"
+        style={{
+          color: isActive ? theme.highlightGold : theme.silver,
+        }}
         whileHover={{ y: -2 }}
       >
         {children}
         {isActive && (
           <motion.div
             layoutId="navIndicator"
-            className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#996600]"
+            className="absolute bottom-0 left-0 right-0 h-[2px]"
+            style={{ background: theme.gold }}
           />
         )}
       </motion.span>

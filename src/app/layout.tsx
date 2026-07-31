@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Source_Sans_3, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { ClientProviders } from "@/components/Providers/Providers";
+import { DEFAULT_SITE_CONFIG } from "@/lib/site-configs";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
@@ -17,13 +18,17 @@ const notoSans = Noto_Sans_SC({
   display: "swap",
 });
 
+const site = DEFAULT_SITE_CONFIG;
+const blueColor = site.theme.blue.replace('#', '%23');
+const goldColor = site.theme.gold.replace('#', '%23');
+
 export const metadata: Metadata = {
-  title: "HKUST 录取通知书 | Admission Letter 2026",
-  description: "The Hong Kong University of Science and Technology digital admission experience. 香港科技大学数字入学体验。",
+  title: `${site.nameEn} Admission Letter | ${site.welcome.academicYear}`,
+  description: `${site.nameEn} digital admission experience. ${site.name}`,
   icons: {
     icon: [
       {
-        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23003366'/><stop offset='100%25' stop-color='%23996600'/></linearGradient></defs><rect fill='url(%23g)' width='100' height='100' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='50' fill='%23996600' font-weight='bold' font-family='Arial'>HKUST</text></svg>",
+        url: `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='${blueColor}'/><stop offset='100%25' stop-color='${goldColor}'/></linearGradient></defs><rect fill='url(%23g)' width='100' height='100' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='50' fill='${goldColor}' font-weight='bold' font-family='Arial'>${site.shortCode}</text></svg>`,
         type: "image/svg+xml",
       },
     ],

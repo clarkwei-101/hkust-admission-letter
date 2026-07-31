@@ -8,20 +8,25 @@
 }
 
 :root {
-  /* HKUST Official Colors */
+  /* Theme tokens — overriden at runtime by ThemeRoot via document.documentElement */
   --hkust-blue: #003366;
   --hkust-gold: #996600;
   --hkust-white: #FFFFFF;
   --hkust-silver: #C0C0C0;
   --hkust-light-blue: #4a7eb5;
   --hkust-dark-blue: #001a33;
-  
+  --hkust-highlight-gold: #d4a84b;
+  --site-short-code: HK;
+  --site-name-en: "The Hong Kong University of Science and Technology";
+
   /* Gradients */
   --gradient-blue: linear-gradient(135deg, var(--hkust-blue) 0%, var(--hkust-light-blue) 100%);
-  --gradient-gold: linear-gradient(135deg, var(--hkust-gold) 0%, #d4a84b 100%);
+  --gradient-gold: linear-gradient(135deg, var(--hkust-gold) 0%, var(--hkust-highlight-gold) 100%);
   --gradient-hero: linear-gradient(180deg, rgba(0,26,51,0.95) 0%, rgba(0,51,102,0.9) 50%, rgba(0,51,102,0.85) 100%);
-  
-  /* Shadows */
+  --gradient-blue-to-gold: linear-gradient(135deg, var(--hkust-blue) 0%, var(--hkust-gold) 100%);
+  --gradient-gold-to-highlight: linear-gradient(90deg, var(--hkust-gold), var(--hkust-highlight-gold));
+
+  /* Shadows — based on token colors */
   --shadow-glow: 0 0 40px rgba(153, 102, 0, 0.4);
   --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.4);
   --shadow-elevated: 0 30px 80px rgba(0, 0, 0, 0.5);
@@ -34,6 +39,7 @@
   --color-hkust-silver: var(--hkust-silver);
   --color-hkust-light-blue: var(--hkust-light-blue);
   --color-hkust-dark-blue: var(--hkust-dark-blue);
+  --color-hkust-highlight-gold: var(--hkust-highlight-gold);
 }
 
 * {
@@ -109,11 +115,11 @@ body {
 
 /* Text Gradients */
 .text-gradient-gold {
-  background: linear-gradient(135deg, #d4a84b 0%, var(--hkust-gold) 50%, #b8890a 100%);
+  background: linear-gradient(135deg, var(--hkust-highlight-gold) 0%, var(--hkust-gold) 50%, var(--hkust-gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 20px rgba(153, 102, 0, 0.5));
+  filter: drop-shadow(0 0 20px var(--hkust-gold)80);
 }
 
 .text-gradient-white {

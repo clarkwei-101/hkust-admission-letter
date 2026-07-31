@@ -2,6 +2,8 @@
 
 import { I18nProvider, useI18n, LOCALES, LOCALE_LABELS, Locale } from '@/lib/i18n';
 import { PersonalisationProvider } from '@/lib/personalisation';
+import { UniversityProvider } from '@/lib/university';
+import { ThemeRoot } from '@/components/ThemeRoot';
 import { ReactNode } from 'react';
 
 function LanguageSwitcherInner() {
@@ -31,7 +33,12 @@ export function LanguageSwitcher() {
 export function ClientProviders({ children }: { children: ReactNode }) {
   return (
     <I18nProvider>
-      <PersonalisationProvider>{children}</PersonalisationProvider>
+      <UniversityProvider>
+        <PersonalisationProvider>
+          <ThemeRoot />
+          {children}
+        </PersonalisationProvider>
+      </UniversityProvider>
     </I18nProvider>
   );
 }
