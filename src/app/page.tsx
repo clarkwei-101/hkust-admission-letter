@@ -233,34 +233,11 @@ export default function HomePage() {
           className="fixed inset-0 z-30 flex items-center justify-center"
         >
           <div className="w-full max-w-md text-center px-8">
-            {/* CF icon with glow */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.15, duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
-              className="mb-10 flex justify-center"
-            >
-              <div className="relative">
-                {/* Outer glow */}
-                <div className="absolute inset-0 rounded-2xl bg-[#996600]/25 blur-xl scale-110 animate-pulse" />
-                {/* Breathing border ring */}
-                <div className="absolute -inset-1.5 rounded-[1rem] border border-[#996600]/50 animate-[breathe-scale_3s_ease-in-out_infinite]" />
-                {/* Icon */}
-                <div className="relative w-32 h-32 rounded-2xl overflow-hidden shadow-2xl border border-[#996600]/60 bg-[#001428]/70">
-                  <img
-                    src="/ai-club-icon.png"
-                    alt="AI X SCI-FI Club"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </motion.div>
-
             {/* Dynamic admission year */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.35 }}
+              transition={{ delay: 0.15 }}
               className="text-white/60 text-xs mb-10 tracking-[0.35em] uppercase"
             >
               2026 Intake · Admission Invitation

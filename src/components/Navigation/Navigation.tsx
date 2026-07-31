@@ -129,9 +129,6 @@ export default function Navigation({ showBackButton = false, title }: Navigation
             <NavLink href="/content/campus-live" isActive={pathname.includes('/campus-live')} theme={theme}>
               {locale === 'zh' ? '实时校园' : 'Live Campus'}
             </NavLink>
-            <NavLink href="/preview" isActive={pathname === '/preview'} theme={theme}>
-              {locale === 'zh' ? '模板' : 'Templates'}
-            </NavLink>
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">

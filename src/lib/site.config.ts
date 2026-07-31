@@ -346,10 +346,3 @@ export const hkust: SiteConfig = {
 };
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = hkust;
-
-/**
- * Bundled presets — alternate identities that ship with the template so anyone
- * hitting the site can preview how a different university would look.
- */
-export const PRESET_KEYS = ['hkust', 'cuhk', 'hku', 'pku', 'personal'] as const;
-export type PresetKey = (typeof PRESET_KEYS)[number];

@@ -1,19 +1,18 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useUniversity } from '@/lib/university';
+import { DEFAULT_SITE_CONFIG } from '@/lib/site.config';
 
 /**
- * Injects the live-preview site's theme tokens as CSS custom properties on
+ * Injects the site's theme tokens as CSS custom properties on
  * `document.documentElement`, so the entire cascade (globals.css + Tailwind
- * arbitrary classes reading var(--hkust-blue) etc.) updates without a hard
- * reload of the stylesheet.
+ * arbitrary classes reading var(--hkust-blue) etc.) picks up the right palette.
  *
- * Falls back to the default theme if no preset is active.
+ * Config is constant for this build, so we just write once on mount.
  */
 export function ThemeRoot() {
-  const { config } = useUniversity();
-  const t = config.theme;
+  const t = DEFAULT_SITE_CONFIG.theme;
+  const config = DEFAULT_SITE_CONFIG;
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -28,7 +27,7 @@ export function ThemeRoot() {
     root.style.setProperty('--site-name-en', `"${config.nameEn}"`);
     root.dataset.siteKey = config.key;
     document.title = config.nameEn;
-  }, [config]);
+  }, [t, config]);
 
   return null;
 }
