@@ -2,12 +2,30 @@
   "name": "hkust-admission-letter",
   "version": "0.1.0",
   "private": true,
+  "description": "Cinematic open-source digital admission letter template — built for HKUST, forkable for any university.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
+  "keywords": [
+    "nextjs",
+    "admission-letter",
+    "open-source",
+    "university",
+    "hkust",
+    "template"
+  ],
+  "homepage": "https://github.com/clarkwei-101/hkust-admission-letter#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clarkwei-101/hkust-admission-letter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/clarkwei-101/hkust-admission-letter/issues"
+  },
+  "license": "MIT",
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",

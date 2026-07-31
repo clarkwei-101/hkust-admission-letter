@@ -2,7 +2,7 @@
 
 The site is built around a **single source of truth** — `src/lib/site.config.ts`. To rebrand it for any university, club, personal portfolio, or commercial product, edit that file and ship. No component edits required.
 
-> Reading this README end-to-end takes ~10 min. After that you can fork the project, edit one file, and deploy in under 5 min.
+> Reading this guide end-to-end takes ~10 min. After that you can fork the project, edit one file, and deploy in under 5 min.
 
 ---
 
@@ -23,7 +23,7 @@ export const hkust: SiteConfig = {
 };
 ```
 
-Done.
+That's it. The variable name (`hkust`) doesn't have to match your university — what matters is the field values. If you want a cleaner name, rename `hkust` to your university's short identifier (e.g. `stanford`) — and remember to also update the `DEFAULT_SITE_CONFIG` export to point at it.
 
 ---
 
@@ -33,10 +33,10 @@ Done.
 
 | Field | Type | Description |
 |---|---|---|
-| `key` | `string` | Unique identifier. Used in `localStorage` and the URL `?preset=` switcher. Lowercase, no spaces. |
+| `key` | `string` | Unique identifier for this build. Lowercase, no spaces. Becomes `data-site-key` on `<html>`. |
 | `name` | `string` | Chinese / local display name. |
 | `nameEn` | `string` | English display name (also becomes the page `<title>`). |
-| `shortCode` | `string` | 1–3 letter tag shown in nav badge and favicon. E.g. `HK`, `CU`, `PKU`. |
+| `shortCode` | `string` | 1–3 letter tag shown in nav badge and favicon. E.g. `HK`, `CU`, `PKU`, `SU`. |
 | `foundedYear` | `number` | Used to compute program/milestone timing. |
 | `city` | `string` | Display city (e.g. `Hong Kong`, `Beijing`, `Stanford`). |
 | `country` | `string` | Display country (e.g. `China`, `USA`). |
@@ -67,7 +67,7 @@ theme: {
   },
   lightBlue: '#4a7eb5',      // hover / light variant
   darkBlue: '#001a33',       // shadow / page background
-  silver: '#C0C0C0',        // muted neutral
+  silver: '#C0C0C0',         // muted neutral
   highlightGold: '#d4a84b',  // one notch brighter than gold
 }
 ```
@@ -213,11 +213,14 @@ apps: {
 2. **Replace HKUST-specific assets**
 
    In `public/`:
+
    - `landing-hero.mp4` — your university cinematic intro (or remove and the site will still work)
    - `landing-hero-audio.m4a` — optional soundtrack
-   - `cyber-foundation-icon.png` — your club logo
+   - `cyber-foundation-icon.png` — your club logo (referenced from `site.config.ts` `aiClub`)
+   - `hkust-logo-official.png` — your official university logo
 
    In `src/components/HKUSTThreeMap/` — either:
+
    - Replace `hkustGeo.ts` and `hkustData.ts` with your own 3D campus coordinates, OR
    - Delete the component and remove references from `src/app/content/virtual-tour/page.tsx`
 
@@ -225,15 +228,15 @@ apps: {
 
 3. **Edit the config**
 
-   Open `src/lib/site.config.ts`. Replace `hkust` with your university's data (or create a new preset in `src/lib/site-configs/your-uni.ts`).
+   Open `src/lib/site.config.ts`. Replace the entire `hkust` export with your university's data — see the field reference above. Optional: rename the variable from `hkust` to your university's short identifier, and update the `DEFAULT_SITE_CONFIG` export accordingly.
 
 4. **Update i18n dictionaries**
 
-   In `src/lib/i18n/en.ts` and `src/lib/i18n/zh.ts`, find any string that's still HKUST-flavoured (the two files have hundreds of strings — search for "HKUST"). Replace with your own copy.
+   In `src/lib/i18n/en.ts` and `src/lib/i18n/zh.ts`, find any string that's still HKUST-flavoured (the two files have hundreds of strings — search for "HKUST"). Replace with your own copy. Many strings read from `site.config.ts` automatically, so this is usually limited to a handful of hardcoded sentences.
 
 5. **Update metadata**
 
-   In `src/app/layout.tsx`, the `<title>` and favicon are generated from `DEFAULT_SITE_CONFIG.shortCode`. Make sure your config's `shortCode` is what you want visible.
+   In `src/app/layout.tsx`, the `<title>` and favicon are generated from `site.config.nameEn` / `shortCode`. Make sure your config's `shortCode` is what you want visible.
 
 6. **Build & verify**
 
@@ -245,57 +248,33 @@ apps: {
 
 7. **Deploy**
 
-   Push to GitHub → import in Vercel → ship.
+   Push to GitHub → import in Vercel → ship. **No environment variables required.**
 
 ---
 
-## Recipe: add a multi-university preset (live preview mode)
+## Recipe: add a new content page
 
-If you want to host a /preview page that shows your site in several university flavors:
+If you want to add a page (e.g. `Scholarships`):
 
-```ts
-// src/lib/site-configs/your-uni.ts
-import type { SiteConfig } from '../site.config';
-const yourUni: SiteConfig = {
-  key: 'your-uni',
-  name: '...',
-  nameEn: '...',
-  // ...
-};
-export default yourUni;
-```
+1. Create `src/app/content/scholarships/page.tsx` (copy an existing page as a template)
+2. Add a `{ id: 'scholarships', title: '奖学金', titleEn: 'Scholarships', href: '/content/scholarships', icon: 'Award', description: '...', color: '#...' }` entry to `navItems` in `site.config.ts`
+3. Add i18n strings to `src/lib/i18n/en.ts` and `src/lib/i18n/zh.ts` under the relevant namespace (e.g. `nav.scholarships`)
 
-Then:
-
-```ts
-// src/lib/site-configs/index.ts — register the preset
-import yourUni from './your-uni';
-export const PRESETS: Record<PresetKey, SiteConfig> = {
-  hkust, cuhk, hku, pku, personal,
-  'your-uni': yourUni,  // <- add this
-};
-```
-
-```ts
-// src/lib/site.config.ts — add the key
-export const PRESET_KEYS = ['hkust', 'cuhk', 'hku', 'pku', 'personal', 'your-uni'] as const;
-```
-
-Then re-deploy. The `/preview` page now has a sixth card.
+The hub grid will auto-include your new card.
 
 ---
 
 ## Troubleshooting
 
-**The home page still shows HKUST after editing the config** — the home page renders an HKUST-specific cinematic intro (`landing-hero.mp4`). To replace it, swap the video file or remove the `intro` stage entirely.
+**The home page still shows HKUST after editing the config** — make sure you reloaded with cache disabled, or rebuilt with `npm run build && npm run start`. Browser cache plus Next.js's static asset cache can make CSS variables look stale in dev mode.
 
-**Colors look the same after editing `theme`** — your fork's glob might be hardcoding the original HKUST blue. Search for `#003366`, `#996600`, `#d4a84b` across `src/` and `src/app/globals.css` and replace.
+**Colors don't change after editing `theme`** — `ThemeRoot` writes CSS variables once on mount. If you hot-reloaded, open DevTools → Elements → `<html>` and confirm `--hkust-blue` has your new value. If yes and the page still looks wrong, hard-refresh (Cmd/Ctrl+Shift+R).
 
-**`/preview` doesn't switch** — check browser console. localStorage is sandboxed per-origin, so opening the URL in an `iframe` won't share state with the parent.
+**Adding a new page 404s** — confirm that `src/app/content/<slug>/page.tsx` exists, that `navItems[].href` matches exactly (`/content/<slug>`, no trailing slash), and that you rebuilt.
 
-**Build fails** with "Cannot find hkust" — ensure your custom preset's key is added to `PRESET_KEYS` and the `PRESETS` map.
+**Build fails with TypeScript errors** — the strictest check is the `tsconfig.json` settings. Run `npm run build` to see all type errors at once. ESLint warnings are non-blocking unless you configure CI to fail on them.
 
-**Need more pages** — copy one of the existing content pages under `src/app/content/`, add a matching entry to `navItems`, and add new i18n strings under the `pageName: {}` namespace.
+**Vercel deploy returns 404 on all routes** — confirm `vercel.json` is committed at the project root with the `framework: "nextjs"` setting, and that SSO protection is disabled on the Vercel project.
 
 ---
 

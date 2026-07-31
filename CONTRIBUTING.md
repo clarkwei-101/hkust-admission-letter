@@ -59,7 +59,7 @@ If 3000 is occupied, Next.js will pick another port. Check the terminal output.
 - `docs(...): ...` — documentation only
 - `chore(...): ...` — tooling, deps, etc.
 
-`scope` should match the area: `envelope`, `nav`, `i18n`, `site-config`, `preview`, etc.
+`scope` should match the area: `envelope`, `nav`, `i18n`, `site-config`, etc.
 
 ---
 
@@ -76,16 +76,11 @@ If 3000 is occupied, Next.js will pick another port. Check the terminal output.
 
 ---
 
-## Adding a new preset
+## Contributing brand changes
 
-The easiest contribution:
+The easiest contribution: fix a typo in `site.config.ts` or in the i18n dictionaries. Brand strings are centralised, so any copy fix that improves clarity for HKUST students is welcome.
 
-1. Create `src/lib/site-configs/your-uni.ts`
-2. Export a default `SiteConfig` (see `hkust.ts` for the schema)
-3. Register it in `src/lib/site-configs/index.ts` and `src/lib/site.config.ts` (`PRESET_KEYS`)
-4. Run `npm run build` to verify
-
-That's it. The `/preview` page now has a new card. Send a PR.
+For a single-university fork with new branding, see [README.md → Fork Checklist](./README.md#fork-checklist) — forkers who want to rebrand for another university should follow that list rather than sending a PR upstream.
 
 ---
 
@@ -100,8 +95,8 @@ That's it. The `/preview` page now has a new card. Send a PR.
 
 ## Project structure
 
-- **`src/lib/site.config.ts`** — types + default. This is the schema source of truth.
-- **`src/lib/site-configs/`** — alternate `SiteConfig` presets (multi-university mode).
+- **`src/lib/site.config.ts`** — types + default config. This is the schema source of truth.
+- **`src/lib/site-configs/`** — convenience re-exports of `site.config.ts` (no presets in this build).
 - **`src/components/`** — one folder per component. PascalCase folder names.
 - **`src/app/`** — Next.js app router. One folder per route.
 - **`src/lib/i18n/{en,zh}.ts`** — English / 中文 dictionaries.
