@@ -108,8 +108,8 @@ export default function MinecraftPage() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/hkust-minecraft-topdown-v1.4-detailed.png"
-                alt="HKUST in Minecraft v1.4-detailed — annotated top-down map with 22 features (8 landmarks + 14 enhanced buildings with windows, dome, doors) plus paths, roads, parking, trees, and sports fields"
+                src="/hkust-minecraft-topdown-v1.5.png"
+                alt="HKUST in Minecraft v1.5 — annotated top-down map with 50+ features (8 landmarks + 50 buildings + interiors + campus details + dynamic vehicles)"
                 className="w-full h-auto block"
               />
             </motion.div>
@@ -252,7 +252,7 @@ export default function MinecraftPage() {
             <p className="text-white/50 mb-8 max-w-md mx-auto">{m.downloadBody}</p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <a
-                href="/hkust-minecraft-world/HKUST-2026-Bedrock-v1.4-detailed.mcworld"
+                href="/hkust-minecraft-world/HKUST-2026-Bedrock-v1.5.mcworld"
                 download
                 className="px-10 py-4 rounded-full bg-gradient-to-r from-[#6BCB77] to-[#4D96FF] text-white font-bold text-lg shadow-xl shadow-[#6BCB77]/40 hover:shadow-[#6BCB77]/60 transition-all inline-flex items-center gap-2"
               >
@@ -260,7 +260,7 @@ export default function MinecraftPage() {
                 {m.downloadButton}
               </a>
               <a
-                href="https://github.com/clarkwei-101/hkust-minecraft/releases/tag/v1.4-detailed"
+                href="https://github.com/clarkwei-101/hkust-minecraft/releases/tag/v1.5"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-8 py-4 rounded-full bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/20 transition-all inline-flex items-center gap-2"
