@@ -21,9 +21,12 @@ import {
 const LANDMARK_KEYS = [
   { key: 'landmarkDome',     icon: '🔴', color: '#FF6B6B' },
   { key: 'landmarkSundial',  icon: '🟡', color: '#FFD93D' },
+  { key: 'landmarkAtrium',   icon: '🟣', color: '#FF64C8' },
   { key: 'landmarkFountain', icon: '🟢', color: '#6BCB77' },
+  { key: 'landmarkLG7',      icon: '🟠', color: '#FF8C00' },
+  { key: 'landmarkUnderpass', icon: '⚫', color: '#808080' },
   { key: 'landmarkSeaview',  icon: '🔵', color: '#4D96FF' },
-  { key: 'landmarkLibrary',  icon: '🟣', color: '#9467BD' },
+  { key: 'landmarkLibrary',  icon: '🟪', color: '#9467BD' },
 ];
 
 const STEP_ICONS = [Database, Wand2, Hammer, Package];
@@ -105,8 +108,8 @@ export default function MinecraftPage() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/hkust-minecraft-topdown-v1.1.png"
-                alt="HKUST in Minecraft v1.1 — annotated top-down map with 5 hand-built landmark pins"
+                src="/hkust-minecraft-topdown-v1.2.png"
+                alt="HKUST in Minecraft v1.2 — annotated top-down map with 8 hand-built landmark pins"
                 className="w-full h-auto block"
               />
             </motion.div>
@@ -249,7 +252,7 @@ export default function MinecraftPage() {
             <p className="text-white/50 mb-8 max-w-md mx-auto">{m.downloadBody}</p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <a
-                href="/hkust-minecraft-world/HKUST-2026-Bedrock-v1.1.mcworld"
+                href="/hkust-minecraft-world/HKUST-2026-Bedrock-v1.2.mcworld"
                 download
                 className="px-10 py-4 rounded-full bg-gradient-to-r from-[#6BCB77] to-[#4D96FF] text-white font-bold text-lg shadow-xl shadow-[#6BCB77]/40 hover:shadow-[#6BCB77]/60 transition-all inline-flex items-center gap-2"
               >
@@ -257,7 +260,7 @@ export default function MinecraftPage() {
                 {m.downloadButton}
               </a>
               <a
-                href="https://github.com/clarkwei-101/hkust-minecraft/releases/tag/v1.1"
+                href="https://github.com/clarkwei-101/hkust-minecraft/releases/tag/v1.2"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-8 py-4 rounded-full bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/20 transition-all inline-flex items-center gap-2"
