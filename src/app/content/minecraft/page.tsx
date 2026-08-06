@@ -7,7 +7,7 @@ import { useI18n } from '@/lib/i18n';
 import {
   Blocks, Map, Hammer, Package, Download, GitBranch, ArrowRight,
   Database, Wand2, Wrench, Boxes, Building2, Sparkles, Trophy,
-  Mountain, DoorOpen, Bird,
+  Mountain, DoorOpen, Bird, Anchor,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -22,7 +22,7 @@ const LANDMARK_KEYS = [
   { key: 'landmarkLibrary',  color: '#9467BD' },
 ];
 
-const STEP_ICONS = [Database, Wand2, Hammer, Package, Wrench, Trophy, Mountain];
+const STEP_ICONS = [Database, Wand2, Hammer, Package, Wrench, Trophy, Mountain, Anchor];
 
 interface V19Building {
   name: string;
@@ -164,8 +164,8 @@ export default function MinecraftPage() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/hkust-minecraft-topdown-v2.0.png"
-                alt="HKUST in Minecraft v2.0 — 408×488 annotated top-down with anchored buildings, smoothed slopes, complete RED 火鸟 sundial with 12 hour-markers, and entrance gates on every large building"
+                src="/hkust-minecraft-topdown-v2.1.png"
+                alt="HKUST in Minecraft v2.1 — every building fully grounded from ground up, full RED 火鸟 sundial, 25+ entrance gates, 408,000 blocks"
                 className="w-full h-auto block"
               />
             </motion.div>
@@ -193,43 +193,51 @@ export default function MinecraftPage() {
               <p className="text-white/50 text-sm max-w-xl mx-auto">{m.sectionProgressBody}</p>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-4">
+            <div className="grid md:grid-cols-5 gap-3">
               {[
                 { v: 'v1.7', stat: m.v17Stat, fidelity: 90, color: '#FFD93D', label: isZh ? '12 地标' : '12 landmarks' },
                 { v: 'v1.8', stat: m.v18Stat, fidelity: 98, color: '#4D96FF', label: isZh ? '21k 细节' : '21k details' },
                 { v: 'v1.9', stat: m.v19Stat, fidelity: 99, color: '#6BCB77', label: isZh ? '13 新建筑' : '13 new buildings' },
-                { v: 'v2.0', stat: m.v20Stat, fidelity: 99.5, color: '#FF6B6B', label: isZh ? '物理 + 大门' : 'physics + gates' },
-              ].map(({ v, stat, fidelity, color, label }, i) => (
+                { v: 'v2.0', stat: m.v20Stat, fidelity: 99.5, color: '#FF8C42', label: isZh ? '物理 + 大门' : 'physics + gates' },
+                { v: 'v2.1', stat: m.v21Stat, fidelity: 99.9, color: '#FF6B6B', label: isZh ? '全程贴地' : 'fully grounded' },
+                { v: 'v2.3', stat: m.v23Stat, fidelity: 99.95, color: '#00D4FF', label: isZh ? '生活化' : 'lived-in', current: true },
+              ].map(({ v, stat, fidelity, color, label, current }, i) => (
                 <motion.div
                   key={v}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + i * 0.1 }}
-                  className="glass rounded-2xl p-5 border border-white/10 hover:border-white/30 transition-all"
+                  transition={{ delay: 0.5 + i * 0.08 }}
+                  className={`glass rounded-2xl p-4 border transition-all relative overflow-hidden ${
+                    current
+                      ? 'border-[#FF6B6B]/50 shadow-lg shadow-[#FF6B6B]/20'
+                      : 'border-white/10 hover:border-white/30'
+                  }`}
                 >
-                  <div className="flex items-baseline justify-between mb-3">
+                  {current && (
+                    <div className="absolute top-0 right-0 px-2 py-0.5 bg-[#FF6B6B] text-[8px] uppercase tracking-widest text-white font-bold rounded-bl-lg">
+                      {isZh ? '最新' : 'Latest'}
+                    </div>
+                  )}
+                  <div className="flex items-baseline justify-between mb-2">
                     <span
-                      className="text-3xl font-bold tracking-tight"
+                      className="text-2xl md:text-3xl font-bold tracking-tight"
                       style={{ color }}
                     >
                       {v}
                     </span>
-                    <span className="text-[10px] uppercase tracking-widest text-white/40">
-                      {label}
-                    </span>
+                    <span className="text-[9px] uppercase tracking-widest text-white/40">{label}</span>
                   </div>
-                  <div className="text-white/70 text-sm mb-3 leading-relaxed min-h-[3em]">{stat}</div>
-                  {/* Fidelity bar */}
-                  <div className="relative h-2 rounded-full bg-white/10 overflow-hidden">
+                  <div className="text-white/70 text-xs mb-2 leading-relaxed min-h-[3em]">{stat}</div>
+                  <div className="relative h-1.5 rounded-full bg-white/10 overflow-hidden">
                     <motion.div
                       className="absolute inset-y-0 left-0 rounded-full"
                       style={{ background: color, boxShadow: `0 0 12px ${color}80` }}
                       initial={{ width: 0 }}
                       animate={{ width: `${fidelity}%` }}
-                      transition={{ delay: 0.8 + i * 0.1, duration: 1, ease: 'easeOut' }}
+                      transition={{ delay: 0.8 + i * 0.08, duration: 1, ease: 'easeOut' }}
                     />
                   </div>
-                  <div className="mt-2 flex items-baseline justify-between text-[10px] uppercase tracking-widest">
+                  <div className="mt-1.5 flex items-baseline justify-between text-[9px] uppercase tracking-widest">
                     <span className="text-white/40">{isZh ? '还原度' : 'Fidelity'}</span>
                     <span className="font-bold" style={{ color }}>{fidelity}%</span>
                   </div>
@@ -260,10 +268,11 @@ export default function MinecraftPage() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-5">
-              {[m.step1Title, m.step2Title, m.step3Title, m.step4Title, m.step5Title, m.step6Title, m.step7Title].map((title, i) => {
+              {[m.step1Title, m.step2Title, m.step3Title, m.step4Title, m.step5Title, m.step6Title, m.step7Title, m.step8Title].map((title, i) => {
                 const Icon = STEP_ICONS[i];
                 const bodyKey = `step${i + 1}Body` as const;
                 const isV20 = i === 6;
+                const isV21 = i === 7;
                 return (
                   <motion.div
                     key={title}
@@ -271,13 +280,21 @@ export default function MinecraftPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 + i * 0.08 }}
                     className={`glass rounded-2xl p-6 border transition-all ${
-                      isV20 ? 'border-[#FF6B6B]/40 shadow-lg shadow-[#FF6B6B]/10' : 'border-[#996600]/20 hover:border-[#996600]/40'
+                      isV21
+                        ? 'border-[#FF6B6B]/60 shadow-xl shadow-[#FF6B6B]/30 ring-1 ring-[#FF6B6B]/30'
+                        : isV20
+                        ? 'border-[#FF8C42]/40 shadow-lg shadow-[#FF8C42]/10'
+                        : 'border-[#996600]/20 hover:border-[#996600]/40'
                     }`}
                   >
                     <div className="flex items-start gap-4">
                       <div
                         className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center shadow-lg ${
-                          isV20 ? 'bg-gradient-to-br from-[#FF6B6B] to-[#FF6B6B]/60 shadow-[#FF6B6B]/30' : 'bg-gradient-to-br from-[#996600] to-[#d4a84b] shadow-[#996600]/30'
+                          isV21
+                            ? 'bg-gradient-to-br from-[#FF6B6B] to-[#FF1493] shadow-[#FF6B6B]/50'
+                            : isV20
+                            ? 'bg-gradient-to-br from-[#FF8C42] to-[#FF8C42]/60 shadow-[#FF8C42]/30'
+                            : 'bg-gradient-to-br from-[#996600] to-[#d4a84b] shadow-[#996600]/30'
                         }`}
                       >
                         <Icon className="w-5 h-5 text-white" />
@@ -473,6 +490,160 @@ export default function MinecraftPage() {
           {/* Divider */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#6BCB77]/40 to-transparent" />
 
+          {/* v2.1 BEFORE/AFTER — Full Grounding Showcase */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.68 }}
+            className="space-y-6"
+          >
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FF6B6B]/10 border border-[#FF6B6B]/30 mb-4">
+                <Anchor className="w-3.5 h-3.5 text-[#FF6B6B]" />
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[#FF6B6B]">
+                  {isZh ? 'v2.1 全程贴地 · 完整火鸟日晷 · 大门入口' : 'v2.1 Fully Grounded · Full Firebird Sundial · Entrance Gates'}
+                </span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                {m.v21ShowcaseTitle}
+              </h2>
+              <p className="text-white/55 text-sm max-w-2xl mx-auto">{m.v21ShowcaseBody}</p>
+            </div>
+
+            {/* Before/After visual */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.75 }}
+              className="glass rounded-3xl p-3 md:p-5 border border-[#FF6B6B]/30 overflow-hidden"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/hkust-minecraft-grounding-v2.1.png"
+                alt="Before (v2.0) — buildings float on slope; After (v2.1) — column-anchored stone_bricks fill all gaps, every building built from ground up"
+                className="w-full h-auto rounded-2xl block"
+              />
+              <div className="grid grid-cols-2 gap-4 mt-4 px-2">
+                <div className="text-center">
+                  <span className="inline-block px-3 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-bold uppercase tracking-widest">
+                    {isZh ? '修正前' : 'Before'}
+                  </span>
+                  <p className="text-white/50 text-xs mt-2">{m.v21BeforeLabel}</p>
+                </div>
+                <div className="text-center">
+                  <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold uppercase tracking-widest">
+                    {isZh ? '修正后' : 'After'}
+                  </span>
+                  <p className="text-white/50 text-xs mt-2">{m.v21AfterLabel}</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Two side-by-side fix cards */}
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                {
+                  icon: Anchor,
+                  title: m.v21Fix1Title,
+                  body: m.v21Fix1Body,
+                  color: '#00D4FF',
+                  coord: m.v21Fix1Coord,
+                },
+                {
+                  icon: Building2,
+                  title: m.v21Fix2Title,
+                  body: m.v21Fix2Body,
+                  color: '#7B2FFF',
+                  coord: m.v21Fix2Coord,
+                },
+              ].map(({ icon: Icon, title, body, color, coord }, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: i === 0 ? -20 : 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.85 + i * 0.1 }}
+                  whileHover={{ y: -4 }}
+                  className="glass rounded-2xl p-6 border transition-all"
+                  style={{ borderColor: `${color}40` }}
+                >
+                  <div className="flex items-start gap-4">
+                    <div
+                      className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+                      style={{
+                        background: `linear-gradient(135deg, ${color}, ${color}80)`,
+                        boxShadow: `0 8px 20px ${color}40`,
+                      }}
+                    >
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-baseline justify-between gap-2 mb-2">
+                        <h3 className="text-white font-bold text-sm leading-snug">{title}</h3>
+                        <span
+                          className="text-[10px] uppercase tracking-widest font-bold shrink-0"
+                          style={{ color }}
+                        >
+                          {coord}
+                        </span>
+                      </div>
+                      <p className="text-white/55 text-xs leading-relaxed">{body}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Stat strip */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { num: m.v21Stat1, label: isZh ? '悬浮建筑' : 'Floating blocks', color: '#00D4FF' },
+                { num: m.v21Stat2, label: isZh ? '新增块数' : 'New blocks', color: '#7B2FFF' },
+                { num: m.v21Stat3, label: isZh ? '贴地建筑' : 'Grounded buildings', color: '#FF6B6B' },
+              ].map(({ num, label, color }, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.0 + i * 0.08 }}
+                  className="glass rounded-xl p-4 border border-white/10 text-center"
+                >
+                  <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color }}>{num}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-white/50">{label}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Academic Concourse — Most Dramatic Fix */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.15 }}
+              className="glass rounded-3xl p-3 md:p-5 border border-[#FF6B6B]/30 overflow-hidden"
+            >
+              <div className="text-center mb-4 px-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF6B6B]/10 border border-[#FF6B6B]/30 mb-3">
+                  <span className="text-[9px] uppercase tracking-[0.3em] text-[#FF6B6B] font-bold">
+                    {isZh ? '最戏剧性修复 · 学术楼穹顶' : 'Most Dramatic Fix · Academic Concourse'}
+                  </span>
+                </div>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-1">
+                  {isZh ? '162 块石砖填补 15-block 漂浮空隙' : '162 stone_bricks filled a 15-block floating gap'}
+                </h3>
+                <p className="text-white/55 text-xs">
+                  {isZh ? '学术楼 (X=428-432, Z=452) 之前漂在 y=21 (距地面 15 blocks 高)。现在 stone_bricks 从 y=7 一直填到 y=20,让穹顶牢固扎根。' : 'Academic Concourse (X=428-432, Z=452) previously floated at y=21, 15 blocks above ground. Now stone_bricks fill from y=7 to y=20, anchoring the dome firmly.'}
+                </p>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/hkust-minecraft-academic-anchored-v2.1.png"
+                alt="Academic Concourse — Before: black/yellow pattern floats at top; After: solid stone_bricks foundation fills the 15-block gap"
+                className="w-full h-auto rounded-2xl block"
+              />
+            </motion.div>
+          </motion.section>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-[#6BCB77]/40 to-transparent" />
+
           {/* Download — Latest & Legacy */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -486,7 +657,7 @@ export default function MinecraftPage() {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF6B6B]/20 border border-[#FF6B6B]/40 mb-4">
                 <Sparkles className="w-3 h-3 text-[#FF6B6B]" />
                 <span className="text-[10px] uppercase tracking-[0.3em] text-[#FF6B6B] font-bold">
-                  v2.0 · {isZh ? '新版本' : 'New Release'}
+                  v2.1 · {isZh ? '新版本' : 'New Release'}
                 </span>
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
@@ -495,7 +666,7 @@ export default function MinecraftPage() {
               <p className="text-white/60 mb-8 max-w-md mx-auto text-sm">{m.downloadBody}</p>
               <div className="flex items-center justify-center gap-4 flex-wrap">
                 <a
-                  href="/hkust-minecraft-world/HKUST-2026-Bedrock-v2.0.mcworld"
+                  href="/hkust-minecraft-world/HKUST-2026-Bedrock-v2.1.mcworld"
                   download
                   className="px-10 py-4 rounded-full bg-gradient-to-r from-[#FF6B6B] to-[#FFD93D] text-white font-bold text-base shadow-xl shadow-[#FF6B6B]/40 hover:shadow-[#FF6B6B]/60 transition-all inline-flex items-center gap-2"
                 >
@@ -503,7 +674,7 @@ export default function MinecraftPage() {
                   {m.downloadLatest}
                 </a>
                 <a
-                  href="https://github.com/clarkwei-101/hkust-minecraft/releases/tag/v2.0"
+                  href="https://github.com/clarkwei-101/hkust-minecraft/releases/tag/v2.1"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-7 py-4 rounded-full bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/20 transition-all inline-flex items-center gap-2"
@@ -515,7 +686,20 @@ export default function MinecraftPage() {
             </div>
 
             {/* Legacy / Hi-res */}
-            <div className="grid md:grid-cols-3 gap-5">
+            <div className="grid md:grid-cols-4 gap-5">
+              <div className="text-center glass rounded-2xl p-6 border border-[#FF8C42]/20">
+                <Download className="w-6 h-6 text-[#FF8C42] mx-auto mb-3" />
+                <h3 className="text-white font-bold mb-2 text-sm">v2.0 (Physics + Gates)</h3>
+                <p className="text-white/45 text-xs mb-4">{isZh ? 'v2.0 (物理 + 大门, 海岸 aquarium 还在水底)' : 'v2.0 — physics + gates; aquarium still underwater'}</p>
+                <a
+                  href="/hkust-minecraft-world/HKUST-2026-Bedrock-v2.0.mcworld"
+                  download
+                  className="inline-flex items-center gap-1.5 text-xs text-[#FF8C42] hover:text-[#FFA060] font-bold"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  6.5 MB
+                </a>
+              </div>
               <div className="text-center glass rounded-2xl p-6 border border-[#6BCB77]/20">
                 <Download className="w-6 h-6 text-[#6BCB77] mx-auto mb-3" />
                 <h3 className="text-white font-bold mb-2 text-sm">v1.9 (Previous)</h3>
@@ -557,6 +741,103 @@ export default function MinecraftPage() {
               </div>
             </div>
           </motion.div>
+
+          {/* v2.3 — OSM Footways + Amenity + Rooftop */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00D4FF]/10 border border-[#00D4FF]/30 mb-4">
+                <Map className="w-3.5 h-3.5 text-[#00D4FF]" />
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[#00D4FF]">
+                  v2.3 · {isZh ? '生活化' : 'lived-in'}
+                </span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                {m.v23Headline}
+              </h2>
+              <p className="text-white/50 text-sm max-w-2xl mx-auto">{m.v23Body}</p>
+            </div>
+
+            {/* v2.3 stats grid */}
+            <div className="grid md:grid-cols-4 gap-3 mb-8">
+              {[
+                { v: m.v23Stat1, label: isZh ? 'OSM 步行路径' : 'OSM footways', color: '#00D4FF' },
+                { v: m.v23Stat2, label: isZh ? '命名设施' : 'named amenities', color: '#FF6B6B' },
+                { v: m.v23Stat3, label: isZh ? '绿化屋顶' : 'rooftop gardens', color: '#6BCB77' },
+                { v: m.v23Stat4, label: isZh ? '橡树 + 花丛' : 'oak trees + flowers', color: '#FFD93D' },
+              ].map((s, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 + i * 0.06 }}
+                  className="glass rounded-2xl p-4 border border-white/10"
+                >
+                  <div className="text-3xl md:text-4xl font-bold tracking-tight" style={{ color: s.color }}>
+                    {s.v}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">{s.label}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* v2.3 highlights — 4 cards */}
+            <div className="grid md:grid-cols-2 gap-5">
+              {[
+                { title: m.v23Highlight1, body: m.v23Highlight1Body, color: '#00D4FF' },
+                { title: m.v23Highlight2, body: m.v23Highlight2Body, color: '#FF6B6B' },
+                { title: m.v23Highlight3, body: m.v23Highlight3Body, color: '#6BCB77' },
+                { title: m.v23Highlight4, body: m.v23Highlight4Body, color: '#FFD93D' },
+              ].map((h, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 + i * 0.08 }}
+                  className="glass rounded-2xl p-5 border border-white/10 hover:border-white/30 transition-all"
+                >
+                  <div className="mb-2 inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{ background: `${h.color}20`, border: `1px solid ${h.color}40` }}>
+                    <span className="text-lg font-bold" style={{ color: h.color }}>{i + 1}</span>
+                  </div>
+                  <h3 className="text-white font-bold text-sm mb-1">{h.title}</h3>
+                  <p className="text-white/55 text-xs leading-relaxed">{h.body}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* v2.3 download */}
+            <div className="grid md:grid-cols-2 gap-5 mt-8">
+              <div className="glass rounded-2xl p-6 border border-[#00D4FF]/30 text-center">
+                <Building2 className="w-6 h-6 text-[#00D4FF] mx-auto mb-3" />
+                <h3 className="text-white font-bold mb-2 text-sm">{isZh ? 'v2.3 .mcworld 下载' : 'v2.3 .mcworld download'}</h3>
+                <p className="text-white/45 text-xs mb-4">{isZh ? '完整 Bedrock 世界 (7.5 MB, 424k blocks)' : 'Full Bedrock world (7.5 MB, 424k blocks)'}</p>
+                <a
+                  href="/HKUST-2026-Bedrock-v2.3.mcworld"
+                  download
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#00D4FF]/10 border border-[#00D4FF]/40 text-[#00D4FF] text-xs font-semibold hover:bg-[#00D4FF]/20 transition-all"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  {m.downloadTopdownButton}
+                </a>
+              </div>
+              <div className="glass rounded-2xl p-6 border border-white/10 text-center">
+                <Map className="w-6 h-6 text-[#4D96FF] mx-auto mb-3" />
+                <h3 className="text-white font-bold mb-2 text-sm">{m.downloadTopdownLabel}</h3>
+                <p className="text-white/45 text-xs mb-4">{isZh ? 'v2.3 全景顶视图' : 'v2.3 full topdown panorama'}</p>
+                <a
+                  href="/hkust-minecraft-topdown-v2.3.png"
+                  download
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-[#4D96FF]/40 text-[#4D96FF] text-xs font-semibold hover:bg-[#4D96FF]/10 transition-all"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  {m.downloadTopdownButton}
+                </a>
+              </div>
+            </div>
+          </motion.section>
 
           {/* Arnis CTA */}
           <motion.div
