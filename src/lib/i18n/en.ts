@@ -534,6 +534,8 @@ const en = {
     v24Stat2: '3',
     v24Stat3: '34',
     v24Stat4: '101',
+    v24VideoLabel: 'v2.4 cinematic flythrough (60s)',
+    v24VideoBody: '6 acts, 30fps, 1920×1080 — opening orbit, sinkhole flyover, underpass arch, pavilion walk, night lanterns, finale',
     landmarksTitle: 'Hand-built landmarks (v1.4)',
     landmarkDome: { name: 'Academic Dome', coord: '22.3375, 114.2645', size: 'Diameter 40m, 6,907 blocks', material: 'Polished granite + white concrete' },
     landmarkSundial: { name: 'Circle of Time Sundial', coord: '22.33752, 114.26299', size: 'Diameter 20m, 1,744 blocks', material: 'Polished diorite + quartz pillars' },

@@ -7,7 +7,7 @@ import { useI18n } from '@/lib/i18n';
 import {
   Blocks, Map, Hammer, Package, Download, GitBranch, ArrowRight,
   Database, Wand2, Wrench, Boxes, Building2, Sparkles, Trophy,
-  Mountain, DoorOpen, Bird, Anchor,
+  Mountain, DoorOpen, Bird, Anchor, Play,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -904,6 +904,27 @@ export default function MinecraftPage() {
                   <p className="text-white/55 text-xs leading-relaxed">{h.body}</p>
                 </motion.div>
               ))}
+            </div>
+
+            {/* v2.4 cinematic video */}
+            <div className="mt-8 glass rounded-2xl p-6 border border-[#9C27B0]/20">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 rounded-full bg-[#9C27B0]/20 border border-[#9C27B0]/40 flex items-center justify-center">
+                  <Play className="w-4 h-4 text-[#9C27B0] ml-0.5" />
+                </div>
+                <div>
+                  <h3 className="text-white font-bold text-sm">{m.v24VideoLabel}</h3>
+                  <p className="text-white/45 text-xs">{m.v24VideoBody}</p>
+                </div>
+              </div>
+              <video
+                controls
+                preload="metadata"
+                playsInline
+                className="w-full rounded-xl border border-white/10"
+                style={{ aspectRatio: '16/9' }}
+                src="/hkust-v2-4-cinematic.mp4"
+              />
             </div>
 
             {/* v2.4 download */}

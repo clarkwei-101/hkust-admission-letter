@@ -537,6 +537,8 @@ const zh = {
     v24Stat2: '3',
     v24Stat3: '34',
     v24Stat4: '101',
+    v24VideoLabel: 'v2.4 影视级 flythrough (60 秒)',
+    v24VideoBody: '6 幕, 30fps, 1920×1080 — 开场环绕、塌陷洞巡航、地下通道、雨棚漫步、夜间灯笼、终幕',
     landmarksTitle: '手工建筑 (v1.4)',
     landmarkDome: { name: '学术楼圆顶', coord: '22.3375, 114.2645', size: '直径 40m,6,907 块', material: '磨制花岗岩 + 白色混凝土' },
     landmarkSundial: { name: '时间之轮日晷', coord: '22.33752, 114.26299', size: '直径 20m,1,744 块', material: '磨制闪长岩 + 石英柱' },
