@@ -200,7 +200,8 @@ export default function MinecraftPage() {
                 { v: 'v1.9', stat: m.v19Stat, fidelity: 99, color: '#6BCB77', label: isZh ? '13 新建筑' : '13 new buildings' },
                 { v: 'v2.0', stat: m.v20Stat, fidelity: 99.5, color: '#FF8C42', label: isZh ? '物理 + 大门' : 'physics + gates' },
                 { v: 'v2.1', stat: m.v21Stat, fidelity: 99.9, color: '#FF6B6B', label: isZh ? '全程贴地' : 'fully grounded' },
-                { v: 'v2.3', stat: m.v23Stat, fidelity: 99.95, color: '#00D4FF', label: isZh ? '生活化' : 'lived-in', current: true },
+                { v: 'v2.3', stat: m.v23Stat, fidelity: 99.95, color: '#00D4FF', label: isZh ? '生活化' : 'lived-in' },
+                { v: 'v2.4', stat: m.v24Stat, fidelity: 99.95, color: '#9C27B0', label: isZh ? '精修' : 'polished', current: true },
               ].map(({ v, stat, fidelity, color, label, current }, i) => (
                 <motion.div
                   key={v}
@@ -829,6 +830,103 @@ export default function MinecraftPage() {
                 <p className="text-white/45 text-xs mb-4">{isZh ? 'v2.3 全景顶视图' : 'v2.3 full topdown panorama'}</p>
                 <a
                   href="/hkust-minecraft-topdown-v2.3.png"
+                  download
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-[#4D96FF]/40 text-[#4D96FF] text-xs font-semibold hover:bg-[#4D96FF]/10 transition-all"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  {m.downloadTopdownButton}
+                </a>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* v2.4 — Sinkhole, Underpass, Pavilion, Night Lighting */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#9C27B0]/10 border border-[#9C27B0]/30 mb-4">
+                <Mountain className="w-3.5 h-3.5 text-[#9C27B0]" />
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[#9C27B0]">
+                  v2.4 · {isZh ? '精修' : 'polished'}
+                </span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                {m.v24Headline}
+              </h2>
+              <p className="text-white/50 text-sm max-w-2xl mx-auto">{m.v24Body}</p>
+            </div>
+
+            {/* v2.4 stats grid */}
+            <div className="grid md:grid-cols-4 gap-3 mb-8">
+              {[
+                { v: m.v24Stat1, label: isZh ? '塌陷洞' : 'sinkholes', color: '#9C27B0' },
+                { v: m.v24Stat2, label: isZh ? '地下通道' : 'underpasses', color: '#3B82F6' },
+                { v: m.v24Stat3, label: isZh ? '雨棚段' : 'pavilion segments', color: '#10B981' },
+                { v: m.v24Stat4, label: isZh ? '路灯' : 'lanterns', color: '#F59E0B' },
+              ].map((s, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 + i * 0.06 }}
+                  className="glass rounded-2xl p-4 border border-white/10"
+                >
+                  <div className="text-3xl md:text-4xl font-bold tracking-tight" style={{ color: s.color }}>
+                    {s.v}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">{s.label}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* v2.4 highlights — 4 cards */}
+            <div className="grid md:grid-cols-2 gap-5">
+              {[
+                { title: m.v24Highlight1, body: m.v24Highlight1Body, color: '#9C27B0' },
+                { title: m.v24Highlight2, body: m.v24Highlight2Body, color: '#3B82F6' },
+                { title: m.v24Highlight3, body: m.v24Highlight3Body, color: '#10B981' },
+                { title: m.v24Highlight4, body: m.v24Highlight4Body, color: '#F59E0B' },
+              ].map((h, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.0 + i * 0.08 }}
+                  className="glass rounded-2xl p-5 border border-white/10 hover:border-white/30 transition-all"
+                >
+                  <div className="mb-2 inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{ background: `${h.color}20`, border: `1px solid ${h.color}40` }}>
+                    <span className="text-lg font-bold" style={{ color: h.color }}>{i + 1}</span>
+                  </div>
+                  <h3 className="text-white font-bold text-sm mb-1">{h.title}</h3>
+                  <p className="text-white/55 text-xs leading-relaxed">{h.body}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* v2.4 download */}
+            <div className="grid md:grid-cols-2 gap-5 mt-8">
+              <div className="glass rounded-2xl p-6 border border-[#9C27B0]/30 text-center">
+                <Building2 className="w-6 h-6 text-[#9C27B0] mx-auto mb-3" />
+                <h3 className="text-white font-bold mb-2 text-sm">{isZh ? 'v2.4 .mcworld 下载' : 'v2.4 .mcworld download'}</h3>
+                <p className="text-white/45 text-xs mb-4">{isZh ? '完整 Bedrock 世界 (7.0 MB, 428k blocks)' : 'Full Bedrock world (7.0 MB, 428k blocks)'}</p>
+                <a
+                  href="/HKUST-2026-Bedrock-v2.4.mcworld"
+                  download
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#9C27B0]/10 border border-[#9C27B0]/40 text-[#9C27B0] text-xs font-semibold hover:bg-[#9C27B0]/20 transition-all"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  {m.downloadTopdownButton}
+                </a>
+              </div>
+              <div className="glass rounded-2xl p-6 border border-white/10 text-center">
+                <Map className="w-6 h-6 text-[#4D96FF] mx-auto mb-3" />
+                <h3 className="text-white font-bold mb-2 text-sm">{m.downloadTopdownLabel}</h3>
+                <p className="text-white/45 text-xs mb-4">{isZh ? 'v2.4 全景顶视图' : 'v2.4 full topdown panorama'}</p>
+                <a
+                  href="/hkust-minecraft-topdown-v2.4.png"
                   download
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-[#4D96FF]/40 text-[#4D96FF] text-xs font-semibold hover:bg-[#4D96FF]/10 transition-all"
                 >
